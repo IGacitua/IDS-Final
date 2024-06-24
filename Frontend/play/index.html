@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Qubit Quarry</title>
+  </head>
+  <body>
+    <p id="showUser"></p>
+    <button onclick="obtainUserID()">
+      <img
+        src="/Data/Images/Example.png"
+        height="200px"
+        width="200px"
+        style="display: block; margin-left: auto; margin-right: auto"
+      />
+    </button>
+    <p>
+      The image will be a button that will increase POINTS every click.
+      Depending on upgrades
+    </p>
+    <p>
+      Every click will increase a LOCAL variable, that will be sent in a POST
+      request every five seconds
+    </p>
+
+    <script>
+      function obtainUserID() {
+        const parameters = new URLSearchParams(window.location.search);
+        console.log(parameters.get("user"));
+        return parameters.get("user");
+      }
+      function showUser() {
+        const item = document.getElementById("showUser");
+        item.innerText = `You are user ${obtainUserID()}`;
+      }
+      showUser();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Qubit Quarry</title>
+  </head>
+  <body>
+    <h1><bold>Qubit Quarry</bold></h1>
+    <h5>
+      Lore: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+      efficitur augue dolor, eu vestibulum arcu egestas lacinia. Donec sed
+      libero convallis, molestie arcu id, malesuada orci. Vestibulum id
+      tincidunt massa, id fermentum quam. Suspendisse potenti. Maecenas ac magna
+      sed ipsum mollis dictum. Vivamus enim eros, euismod nec magna sed, blandit
+      laoreet purus. Donec nec ullamcorper magna. Curabitur commodo metus non
+      tellus molestie ullamcorper. Pellentesque finibus convallis mi, in ornare
+      dui consectetur faucibus. Nullam pharetra, massa nec posuere faucibus, est
+      risus egestas mi, in congue diam lorem ut nulla.
+    </h5>
+    <button onclick="openUser()">Play!</button>
+    <p>The play button will open an alert that asks for the Username.</p>
+    <p>
+      If the username exists, will open /play/userID, otherwise will create it.
+    </p>
+    <a href="/trophies/">Trophies!</a>
+
+    <script>
+      function openUser() {
+        userInput = prompt("What is your username?");
+        // Add a fetch that finds the userID from that username, or creates a new one.
+        userID = 1; // REMOVE
+        location.href = `/play/?user=${userID}`;
+      }
+    </script>
+  </body>
+</html>
