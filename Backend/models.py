@@ -7,16 +7,16 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    total_points = db.Column(db.Integer, nullable=False)
-    current_points = db.Column(db.Integer, nullable=False)
-    lastclick = db.Column(db.Date, nullable=False)
+    total_points = db.Column(db.Integer, nullable=False) # Todos los puntos que ganó el usuario, sin considerar gastos. Se usa para ver la etapa del juego
+    current_points = db.Column(db.Integer, nullable=False) # Los puntos que tiene el usuario para gastar.
+    lastclick = db.Column(db.Date, nullable=False) # Momento del ultimo clic. Se usa para calcular los puntos que deben dar las mejoras pasivas.
     trofeo=db.relationship('Trofeo', uselist=False,backref='user', lazy=True)
     
 class Mejora(db.Model):
     __tablename__ = 'mejoras'
     id = db.Column(db.Integer, primary_key=True)
     nombre_comun = db.Column(db.String(255), nullable=False)
-    efecto = db.Column(db.String(50), nullable=False)  # Puede ser 'suma', 'multi', 'pasivo'
+    efecto = db.Column(db.String(50), nullable=False)  # Puede ser 'suma', 'multi', 'pasivo', o 'potencia'
     valor = db.Column(db.Integer, nullable=False)  # Valor del efecto, en caso de pasivo, qubits por segundo
     efecto_tier = db.Column(db.Integer, nullable=False)  # Cuánto afecta el valor cada tier
     nombre_tier_1 = db.Column(db.String(255), nullable=False)
