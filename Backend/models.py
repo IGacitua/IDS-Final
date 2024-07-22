@@ -5,23 +5,32 @@ db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     total_points = db.Column(db.Integer, nullable=False) # Todos los puntos que ganó el usuario, sin considerar gastos. Se usa para ver la etapa del juego
-    current_points = db.Column(db.Integer, nullable=False) # Los puntos que tiene el usuario para gastar.
+    spent_points = db.Column(db.Integer, nullable=False) # Los puntos que gastó el usuario. Usados para calcular puntos actuales
     lastclick = db.Column(db.Date, nullable=False) # Momento del ultimo clic. Se usa para calcular los puntos que deben dar las mejoras pasivas.
     trofeo=db.relationship('Trofeo', uselist=False,backref='user', lazy=True)
-    
+    # Agregar una columna para el tier de cada mejora
+
 class Mejora(db.Model):
     __tablename__ = 'mejoras'
     id = db.Column(db.Integer, primary_key=True)
-    nombre_comun = db.Column(db.String(255), nullable=False)
+    nombre_interno = db.Column(db.String(255), nullable=False)
     efecto = db.Column(db.String(50), nullable=False)  # Puede ser 'suma', 'multi', 'pasivo', o 'potencia'
-    valor = db.Column(db.Integer, nullable=False)  # Valor del efecto, en caso de pasivo, qubits por segundo
-    efecto_tier = db.Column(db.Integer, nullable=False)  # Cuánto afecta el valor cada tier
+
+    # Valor y nombre de cada tier (No deberían existir mas de 5 por mejora)
+    # Todos menos el primero pueden ser nulos
+    valor_tier_1 = db.Column(db.Integer, nullable=False) 
     nombre_tier_1 = db.Column(db.String(255), nullable=False)
-    nombre_tier_2 = db.Column(db.String(255), nullable=False)
-    #Acá se añadirian mas tiers de ser necesarias
+    valor_tier_2 = db.Column(db.Integer, nullable=True)
+    nombre_tier_2 = db.Column(db.String(255), nullable=True)
+    valor_tier_3 = db.Column(db.Integer, nullable=True)
+    nombre_tier_3 = db.Column(db.String(255), nullable=True)
+    valor_tier_4 = db.Column(db.Integer, nullable=True)
+    nombre_tier_4 = db.Column(db.String(255), nullable=True)
+    valor_tier_5 = db.Column(db.Integer, nullable=True)
+    nombre_tier_5 = db.Column(db.String(255), nullable=True)
     
 class Trofeo(db.Model):
     __tablename__ = 'trofeos'
