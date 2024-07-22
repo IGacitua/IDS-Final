@@ -4,7 +4,7 @@
     <title>Qubit Quarry</title>
   </head>
   <body>
-    <p id="showUser"></p>
+    <p id="userDisplay"></p>
     <button onclick="calculatePoints()">
       <img
         src="/Data/Images/Example.png"
@@ -13,6 +13,7 @@
         style="display: block; margin-left: auto; margin-right: auto"
       />
     </button>
+    <p id="pointDisplay"></p>
     <p>
       The image will be a button that will increase POINTS every click.
       Depending on upgrades
@@ -34,10 +35,13 @@
       var miningValue = 0;
       var miningPassive = 0;
 
-      function showUser() {
-        const item = document.getElementById("showUser");
-        item.innerText = `You are user ${obtainUserID()}`;
+      function textUpdate() {
+        const userDisplay = document.getElementById("userDisplay");
+        userDisplay.innerText = `You are user ${userID}`;
+        const pointDisplay = document.getElementById("pointDisplay");
+        pointDisplay.innerText = `Current Points: ${currentPoints}`;
       }
+      textUpdate();
       function fetchUpgrades() {
         // Fetch from backend
         let upgradeArray = [
@@ -74,12 +78,20 @@
         );
         miningValue = miningAddition ** miningExponent * miningMultiply;
       }
+
       function calculatePoints() {
         fetchUpgrades();
         var timeSinceLastClick = 60; // Time in seconds since the last click
         currentPoints += miningValue + miningPassive * timeSinceLastClick;
         console.log(`Current points: ${currentPoints}`);
+        textUpdate();
       }
+
+      function regularFetch() {
+        console.log("A fetch would have been executed right now!");
+        // This function will send a POST request every few seconds to update the USERS table
+      }
+      setInterval(regularFetch, 5000);
     </script>
   </body>
 </html>
