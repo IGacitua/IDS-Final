@@ -5,7 +5,7 @@
   </head>
   <body>
     <p id="showUser"></p>
-    <button onclick="obtainUserID()">
+    <button onclick="calculatePoints()">
       <img
         src="/Data/Images/Example.png"
         height="200px"
@@ -25,14 +25,61 @@
     <script>
       function obtainUserID() {
         const parameters = new URLSearchParams(window.location.search);
-        console.log(parameters.get("user"));
+        console.log(`Current userID: ${parameters.get("user")}`);
         return parameters.get("user");
       }
+
+      const userID = obtainUserID();
+      var currentPoints = 0;
+      var miningValue = 0;
+      var miningPassive = 0;
+
       function showUser() {
         const item = document.getElementById("showUser");
         item.innerText = `You are user ${obtainUserID()}`;
       }
-      showUser();
+      function fetchUpgrades() {
+        // Fetch from backend
+        let upgradeArray = [
+          // This will be replaced by the fetch
+          { Name: "Steel Pickaxe", Effect: "ADD", Value: 5 },
+          { Name: "Electric Lantern", Effect: "MULTIPLY", Value: 2 },
+          { Name: "Gnome Assistants", Effect: "PASSIVE", Value: 1 },
+          { Name: "Good Meal", Effect: "EXPONENT", Value: 1 },
+        ];
+
+        miningValue = 0;
+        miningPassive = 0;
+        var miningAddition = 0;
+        var miningMultiply = 1;
+        var miningExponent = 1;
+
+        for (let i = 0; i < upgradeArray.length; i++) {
+          if (upgradeArray[i].Effect === "ADD") {
+            miningAddition += upgradeArray[i].Value;
+          } else if (upgradeArray[i].Effect === "MULTIPLY") {
+            miningMultiply += upgradeArray[i].Value;
+          } else if (upgradeArray[i].Effect === "EXPONENT") {
+            miningExponent += upgradeArray[i].Value;
+          } else if (upgradeArray[i].Effect === "PASSIVE") {
+            miningPassive += upgradeArray[i].Value;
+          } else {
+            alert(
+              `Invalid upgrade effect: ${upgradeArray[i].Effect} from ${upgradeArray[i].Name} upgrade`
+            );
+          }
+        }
+        console.log(
+          `Addition: ${miningAddition}, Exponent: ${miningExponent}, Multiplier: ${miningMultiply}, Passive: ${miningPassive}`
+        );
+        miningValue = miningAddition ** miningExponent * miningMultiply;
+      }
+      function calculatePoints() {
+        fetchUpgrades();
+        var timeSinceLastClick = 60; // Time in seconds since the last click
+        currentPoints += miningValue + miningPassive * timeSinceLastClick;
+        console.log(`Current points: ${currentPoints}`);
+      }
     </script>
   </body>
 </html>

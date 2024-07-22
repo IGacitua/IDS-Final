@@ -17,7 +17,7 @@ class Upgrade(db.Model):
     __tablename__ = 'mejoras'
     id = db.Column(db.Integer, primary_key=True)
     internal_name = db.Column(db.String(255), nullable=False)
-    effect = db.Column(db.String(50), nullable=False)  # Puede ser 'suma', 'multi', 'pasivo', o 'potencia'
+    effect = db.Column(db.String(50), nullable=False)  # Puede ser 'ADD', 'MULTIPLY', 'PASSIVE', o 'EXPONENT'
 
     # Valor y nombre de cada tier (No deberían existir mas de 5 por mejora)
     # Todos menos el primero pueden ser nulos
