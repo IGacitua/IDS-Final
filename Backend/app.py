@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from models import db, User, Trofeo, Mejora
+from models import db, User, Trophy, Upgrade
 
 app = Flask(__name__)
 port = 5000
@@ -7,9 +7,15 @@ port = 5000
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://tomy_gomez:tomy_gomez@localhost:5432/mi_base_datos'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-@app.route('/')
-def hello_world():
-    return 'Hello world!'
+@app.route("/")
+def home():
+    return """
+    <html>
+    <body>
+    <h1>Welcome to Cubit!</h1>
+    </body>
+    </html>
+    """
 
 # Listar todos los usuarios
 @app.route("/usuarios/", methods=["GET"])
