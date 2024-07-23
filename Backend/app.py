@@ -12,7 +12,7 @@ def home():
     return """
     <html>
     <body>
-    <h1>Welcome to Cubit!</h1>
+    <h1>Welcome to Cubit API!</h1>
     </body>
     </html>
     """
@@ -28,7 +28,7 @@ def usuarios():
                 'id': usuario.id,
                 'name': usuario.name,
                 'total_points': usuario.total_points,
-                'current_points': usuario.current_points,
+                'spent_points': usuario.spent_points,
                 'lastclick': usuario.lastclick
             }
             usuarios_data.append(usuario_data)
@@ -45,14 +45,14 @@ def nuevo_usuario():
        
         # Se definen valores predeterminados si no se proporcionan
         total_points = data.get('total_points', 0)
-        current_points = data.get('current_points', 0)
+        spent_points = data.get('spent_points', 0)
         lastclick = data.get('lastclick', None)  # Se establece que el usuario nuevo no tiene clickc
        
         # Si lastclick no se proporciona, se usará el valor por defecto en el modelo
-        nuevo_usuario = User(name=nuevo_nombre, total_points=total_points, current_points=current_points, lastclick=lastclick)
+        nuevo_usuario = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points, lastclick=lastclick)
         db.session.add(nuevo_usuario)
         db.session.commit()
-        return jsonify({'usuario': {'id': nuevo_usuario.id, 'name': nuevo_usuario.name, 'total_points': nuevo_usuario.total_points, 'current_points': nuevo_usuario.current_points, 'lastclick': nuevo_usuario.lastclick}}), 201
+        return jsonify({'usuario': {'id': nuevo_usuario.id, 'name': nuevo_usuario.name, 'total_points': nuevo_usuario.total_points, 'spent_points': nuevo_usuario.spent_points, 'lastclick': nuevo_usuario.lastclick}}), 201
     except Exception as error:
         print(error)
         return jsonify({"mensaje": "No se pudo crear el usuario."}), 500 # Esto no deberia pasar nunca
