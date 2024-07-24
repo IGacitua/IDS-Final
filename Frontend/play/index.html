@@ -2,27 +2,45 @@
 <html>
   <head>
     <title>Qubit Quarry</title>
+    <link rel="icon" type="image/x-icon" href="/Data/Images/favicon.png" />
   </head>
+
   <body>
     <p id="userDisplay"></p>
-    <button onclick="calculatePoints()">
-      <img
-        src="/Data/Images/Example.png"
-        height="200px"
-        width="200px"
-        style="display: block; margin-left: auto; margin-right: auto"
-      />
-    </button>
-    <p id="pointDisplay"></p>
-    <p>
-      The image will be a button that will increase POINTS every click.
-      Depending on upgrades
-    </p>
-    <p>
-      Every click will increase a LOCAL variable, that will be sent in a POST
-      request every five seconds
-    </p>
+    <div>
+      <shop style="float: left; width: 30%; text-align: center; height: 100%">
+        <h3>Upgrade Shop</h3>
+        <ul style="list-style-type: none" id="upgradeShop">
+          <li>Test <button>Buy!</button></li>
+          <li>Test <button>Buy!</button></li>
+        </ul>
+      </shop>
+      <div style="float: left; width: 40%">
+        <button onclick="calculatePoints()">
+          <img
+            id="cubeImage"
+            src="/Data/Images/cubeStageOne.png"
+            style="
+              display: block;
+              margin-left: auto;
+              margin-right: auto;
+              max-width: 100%;
+            "
+          />
+        </button>
+        <p id="pointDisplay" style="text-align: center"></p>
+      </div>
 
+      <inventory
+        style="float: left; width: 30%; text-align: center; height: 100%"
+      >
+        <h3>Inventory</h3>
+        <ul style="list-style-type: none; height: 100%" id="upgradeShop">
+          <li>Test</li>
+          <li>Test</li>
+        </ul>
+      </inventory>
+    </div>
     <script>
       function obtainUserID() {
         const parameters = new URLSearchParams(window.location.search);
