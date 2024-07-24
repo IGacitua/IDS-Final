@@ -10,10 +10,7 @@
     <div>
       <shop style="float: left; width: 30%; text-align: center; height: 100%">
         <h3>Upgrade Shop</h3>
-        <ul style="list-style-type: none" id="upgradeShop">
-          <li>Test <button>Buy!</button></li>
-          <li>Test <button>Buy!</button></li>
-        </ul>
+        <ul style="list-style-type: none" id="upgradeShop"></ul>
       </shop>
       <div style="float: left; width: 40%">
         <button onclick="calculatePoints()">
@@ -35,10 +32,10 @@
         style="float: left; width: 30%; text-align: center; height: 100%"
       >
         <h3>Inventory</h3>
-        <ul style="list-style-type: none; height: 100%" id="upgradeShop">
-          <li>Test</li>
-          <li>Test</li>
-        </ul>
+        <ul
+          style="list-style-type: none; height: 100%"
+          id="upgradeInventory"
+        ></ul>
       </inventory>
     </div>
     <script>
@@ -95,6 +92,7 @@
           `Addition: ${miningAddition}, Exponent: ${miningExponent}, Multiplier: ${miningMultiply}, Passive: ${miningPassive}`
         );
         miningValue = miningAddition ** miningExponent * miningMultiply;
+        return upgradeArray;
       }
 
       function calculatePoints() {
@@ -104,6 +102,54 @@
         console.log(`Current points: ${currentPoints}`);
         textUpdate();
       }
+
+      function buyUpgrade(name) {
+        alert(`${name} was bought.`);
+        updateUpgrades();
+      }
+
+      function updateUpgrades() {
+        const inventoryList = document.getElementById("upgradeInventory");
+        const shopList = document.getElementById("upgradeShop");
+        inventoryList.innerHTML = "";
+        shopList.innerHTML = "";
+        let userUpgrades = fetchUpgrades();
+        // Do a fetch of all possible upgrades (From upgrades table)
+        let exampleUpgradeList = [
+          { Name: "Steel Pickaxe", Effect: "ADD", Value: 5 },
+          { Name: "Qubit Pickaxe", Effect: "ADD", Value: 25 },
+          { Name: "Basic Lantern", Effect: "MULTIPLY", Value: 1.5 },
+          { Name: "Electric Lantern", Effect: "MULTIPLY", Value: 2 },
+          { Name: "Gnome Assistants", Effect: "PASSIVE", Value: 1 },
+          { Name: "Good Meal", Effect: "EXPONENT", Value: 1 },
+        ];
+
+        for (let i = 0; i < exampleUpgradeList.length; i++) {
+          found = false;
+          for (let j = 0; j < userUpgrades.length; j++) {
+            if (exampleUpgradeList[i].Name == userUpgrades[j].Name) {
+              found = true;
+              break;
+            }
+          }
+          if (found) {
+            const inventoryElement = document.createElement("li");
+            inventoryElement.innerText = exampleUpgradeList[i].Name;
+            inventoryList.appendChild(inventoryElement);
+          } else {
+            const shopElement = document.createElement("li");
+            shopElement.innerText = exampleUpgradeList[i].Name;
+            const elementButton = document.createElement("button");
+            elementButton.innerText = "Buy";
+            elementButton.addEventListener("click", () => {
+              buyUpgrade(exampleUpgradeList[i].Name);
+            });
+            shopElement.appendChild(elementButton);
+            shopList.appendChild(shopElement);
+          }
+        }
+      }
+      updateUpgrades();
 
       function regularFetch() {
         console.log("A fetch would have been executed right now!");
