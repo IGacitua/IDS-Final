@@ -29,7 +29,7 @@ def usuarios():
                 'name': usuario.name,
                 'total_points': usuario.total_points,
                 'spent_points': usuario.spent_points,
-                'lastclick': usuario.lastclick
+                #'last_click': usuario.last_click
             }
             usuarios_data.append(usuario_data)
         return jsonify(usuarios_data)
@@ -46,16 +46,18 @@ def nuevo_usuario():
         # Se definen valores predeterminados si no se proporcionan
         total_points = data.get('total_points', 0)
         spent_points = data.get('spent_points', 0)
-        lastclick = data.get('lastclick', None)  # Se establece que el usuario nuevo no tiene clickc
+        #lastclick = data.get('lastclick', None)  # Se establece que el usuario nuevo no tiene click
        
         # Si lastclick no se proporciona, se usará el valor por defecto en el modelo
-        nuevo_usuario = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points, lastclick=lastclick)
+        nuevo_usuario = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points) #removido el last_click hasta resolver lo del horario
         db.session.add(nuevo_usuario)
         db.session.commit()
-        return jsonify({'usuario': {'id': nuevo_usuario.id, 'name': nuevo_usuario.name, 'total_points': nuevo_usuario.total_points, 'spent_points': nuevo_usuario.spent_points, 'lastclick': nuevo_usuario.lastclick}}), 201
+        return jsonify({'usuario': {'id': nuevo_usuario.id, 'name': nuevo_usuario.name, 'total_points': nuevo_usuario.total_points, 'spent_points': nuevo_usuario.spent_points}}), 201
     except Exception as error:
         print(error)
         return jsonify({"mensaje": "No se pudo crear el usuario."}), 500 # Esto no deberia pasar nunca
+    
+
 
 if __name__ == '__main__':
     print('Starting server...')

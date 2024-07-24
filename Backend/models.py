@@ -6,10 +6,10 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255), unique=True, nullable=False)
     total_points = db.Column(db.Integer, nullable=False) # Todos los puntos que ganó el usuario, sin considerar gastos. Se usa para ver la etapa del juego
     spent_points = db.Column(db.Integer, nullable=False) # Los puntos que gastó el usuario. Usados para calcular puntos actuales
-    last_click = db.Column(db.Date, nullable=False) # Momento del ultimo clic. Se usa para calcular los puntos que deben dar las mejoras pasivas.
+    last_click = db.Column(db.DateTime, default=datetime.datetime.now()) # Momento del ultimo clic. Se usa para calcular los puntos que deben dar las mejoras pasivas.
     trofeo=db.relationship('Trophy', uselist=False,backref='user', lazy=True)
     # Agregar una columna para el tier de cada mejora
 
