@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from models import db, User, Upgrade, UserUpgrade
-import time
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -49,8 +48,6 @@ def all_users():
             # Se definen valores predeterminados si no se proporcionan
             total_points = data.get('total_points', 0)
             spent_points = data.get('spent_points', 0)
-            #lastclick = data.get('lastclick', None)  # Se establece que el usuario nuevo no tiene cl        
-            # Si lastclick no se proporciona, se usará el valor por defecto en el modelo
             nuevo_user = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points) #removido el last_click hasta resolver lo del horario
             db.session.add(nuevo_user)
             db.session.commit()
@@ -84,7 +81,7 @@ def user_by_id(user_id):
                 return jsonify({"Mensaje": "User does not exist"}), 404
             
         except Exception as error:
-            print(error)
+            print(f"The ${error} happened.")
             return jsonify({"mensaje": f"Error when updating user {user_id}"}), 500
 
     elif request.method == "DELETE":
@@ -93,7 +90,7 @@ def user_by_id(user_id):
             user = User.query.get(user_id)
 
             if user:
-                user_upgrade=UserUpgrade.query.filter_by(user_id==user.id).first()
+                user_upgrade=UserUpgrade.query.filter_by(user_id=user.id).first()
                 if user_upgrade:
                     db.session.delete(user_upgrade)               
                 db.session.delete(user)
@@ -149,8 +146,13 @@ def get_upgrades_by_id(user_id):
             print(error)
             return jsonify({"message": f"Error when searching for user {user_id}."}), 500
         
-    #elif request.method=='POST':
-    
+    # this is quite literally the same as the POST and PUT for users, but this time for upgrades
+    # elif request.method=='POST':
+    # elif request.method=='PUT':
+    else:
+        return jsonify({"message": "Method not allowed."}), 405
+
+        
 if __name__ == '__main__':
     print('Starting server...')
     db.init_app(app)

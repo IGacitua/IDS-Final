@@ -32,6 +32,33 @@
         userID = 1; // REMOVE
         location.href = `/play/?user=${userID}`;
       }
+
+        function response_received(response) {
+            return response.json()
+        }
+
+        function parse_data(content) {
+            console.log(content)
+
+            const container = document.getElementById("users");
+            for (let index = 0; index < content.length; index++) {
+                const item = document.createElement("p");
+                item.innerHTML=content[index].name
+                container.append(item);
+            
+            }
+        }
+
+        function request_error(error) {
+            console.log("ERROR")
+            console.log(error);
+        }
+
+        fetch("http://localhost:5000/users")
+            .then(response_received)
+            .then(parse_data)
+            .catch(request_error)
+    
     </script>
   </body>
 </html>

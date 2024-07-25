@@ -13,6 +13,13 @@ class User(db.Model):
     upgrades=db.relationship('UserUpgrade', uselist=False, backref='User', lazy=True) # Uselist relaciona uno-uno
     # Agregar una columna para el tier de cada mejora
 
+class UserUpgrade(db.Model):
+    __tablename__ = 'user_upgrades'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique = True, primary_key = True)
+    # Añadir una columna INT para el tier de cada mejora
+    # EL NOMBRE DE LA COLUMNA DEBE SER EXACTAMENTE IGUAL A INTERNAL_NAME EN UPGRADE
+    pickaxe = db.Column(db.Integer, nullable=False, default=0)
+
 class Upgrade(db.Model):
     __tablename__ = 'upgrades'
     id = db.Column(db.Integer, primary_key=True)
@@ -38,12 +45,3 @@ class Upgrade(db.Model):
     # Tier 5
     value_tier_5 = db.Column(db.Integer, nullable=True)
     name_tier_5 = db.Column(db.String(255), nullable=True)
-
-class UserUpgrade(db.Model):
-    __tablename__ = 'user_upgrades'
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique = True, primary_key = True)
-    # Añadir una columna INT para el tier de cada mejora
-    # EL NOMBRE DE LA COLUMNA DEBE SER EXACTAMENTE IGUAL A INTERNAL_NAME EN UPGRADE
-    pickaxe = db.Column(db.Integer, nullable=False, default=0)
-    
-   
