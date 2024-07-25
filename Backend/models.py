@@ -1,4 +1,4 @@
-import datetime
+import time
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -9,35 +9,41 @@ class User(db.Model):
     name = db.Column(db.String(255), unique=True, nullable=False)
     total_points = db.Column(db.Integer, nullable=False) # Todos los puntos que ganó el usuario, sin considerar gastos. Se usa para ver la etapa del juego
     spent_points = db.Column(db.Integer, nullable=False) # Los puntos que gastó el usuario. Usados para calcular puntos actuales
-    last_click = db.Column(db.DateTime, default=datetime.datetime.now()) # Momento del ultimo clic. Se usa para calcular los puntos que deben dar las mejoras pasivas.
-    trofeo=db.relationship('Trophy', uselist=False,backref='user', lazy=True)
+    last_click = db.Column(db.Integer, default=int(time.time())) # Momento del ultimo clic. Se usa para calcular los puntos que deben dar las mejoras pasivas.
+    upgrades=db.relationship('UserUpgrade', uselist=False, backref='User', lazy=True) # Uselist relaciona uno-uno
     # Agregar una columna para el tier de cada mejora
 
 class Upgrade(db.Model):
-    __tablename__ = 'mejoras'
+    __tablename__ = 'upgrades'
     id = db.Column(db.Integer, primary_key=True)
     internal_name = db.Column(db.String(255), nullable=False)
     effect = db.Column(db.String(50), nullable=False)  # Puede ser 'ADD', 'MULTIPLY', 'PASSIVE', o 'EXPONENT'
 
     # Valor y nombre de cada tier (No deberían existir mas de 5 por mejora)
     # Todos menos el primero pueden ser nulos
+    # Nulo significa que no tiene se tier
+
+    # Tier 1
     value_tier_1 = db.Column(db.Integer, nullable=False) 
     name_tier_1 = db.Column(db.String(255), nullable=False)
+    # Tier 2
     value_tier_2 = db.Column(db.Integer, nullable=True)
     name_tier_2 = db.Column(db.String(255), nullable=True)
+    # Tier 3
     value_tier_3 = db.Column(db.Integer, nullable=True)
     name_tier_3 = db.Column(db.String(255), nullable=True)
+    # Tier 4
     value_tier_4 = db.Column(db.Integer, nullable=True)
     name_tier_4 = db.Column(db.String(255), nullable=True)
+    # Tier 5
     value_tier_5 = db.Column(db.Integer, nullable=True)
     name_tier_5 = db.Column(db.String(255), nullable=True)
+
+class UserUpgrade(db.Model):
+    __tablename__ = 'user_upgrades'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique = True, primary_key = True)
+    # Añadir una columna INT para el tier de cada mejora
+    # EL NOMBRE DE LA COLUMNA DEBE SER EXACTAMENTE IGUAL A INTERNAL_NAME EN UPGRADE
+    pickaxe = db.Column(db.Integer, nullable=False, default=0)
     
-class Trophy(db.Model):
-    __tablename__ = 'trofeos'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    time_seconds = db.Column(db.Integer, nullable=False)  # Tiempo en segundos, esto seria mejor tenerlo asi para contar en segundos
-    date_obtained = db.Column(db.Date, nullable=False)  # Fecha en que se obtuvo el trofeo
-    custom_message = db.Column(db.String(255), nullable=False)  # Mensaje personalizado del usuario
-    user_id=db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
-    
+   

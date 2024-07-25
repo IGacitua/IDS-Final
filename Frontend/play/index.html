@@ -6,7 +6,6 @@
   </head>
 
   <body>
-    <p id="userDisplay"></p>
     <div>
       <shop style="float: left; width: 30%; text-align: center; height: 100%">
         <h3>Upgrade Shop</h3>
@@ -39,24 +38,18 @@
       </inventory>
     </div>
     <script>
-      function obtainUserID() {
-        const parameters = new URLSearchParams(window.location.search);
-        console.log(`Current userID: ${parameters.get("user")}`);
-        return parameters.get("user");
-      }
-
-      const userID = obtainUserID();
+      
+      const userID = (new URLSearchParams(window.location.search)).get("user");
       var currentPoints = 0;
       var miningValue = 0;
       var miningPassive = 0;
 
-      function textUpdate() {
-        const userDisplay = document.getElementById("userDisplay");
-        userDisplay.innerText = `You are user ${userID}`;
+      function pointsUpdate() {
         const pointDisplay = document.getElementById("pointDisplay");
         pointDisplay.innerText = `Current Points: ${currentPoints}`;
       }
-      textUpdate();
+      pointsUpdate();
+      
       function fetchUpgrades() {
         // Fetch from backend
         let upgradeArray = [
@@ -100,7 +93,7 @@
         var timeSinceLastClick = 60; // Time in seconds since the last click
         currentPoints += miningValue + miningPassive * timeSinceLastClick;
         console.log(`Current points: ${currentPoints}`);
-        textUpdate();
+        pointsUpdate();
       }
 
       function buyUpgrade(name) {

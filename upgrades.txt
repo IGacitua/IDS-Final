@@ -1,0 +1,42 @@
+Upgrades: 
+Disclaimer: Every upgrade has 5 tiers MAXIMUM. For now, we'll focus on one upgrade.
+Damage upgrades:
+Base damage: Base damage for the pickaxe: goes from 1, to 2, to 5, to 7 and to 10
+Multiplier: multiplies by 1.5x,2x,2.5x, 3x and 3.5x to the base damage of the pickaxe
+
+
+Pickaxe:
+    - Tier 0: Bare Fists (0)
+    - Tier 1: Iron Pickaxe (+5)
+    - Tier 2: Bronze Pickaxe (+10)
+    - Tier 3: Steel Pickaxe (+15)
+    - Tier 4: Mithril Pickaxe (+20)
+    - Tier 5: Qubit Pickaxe (+30)
+
+Lantern:
+    - Tier 0: Torch (* 1)
+    - Tier 1: Gas Lamp (* 1.2)
+    - Tier 2: Electric Lantern (* 1.5)
+    - Tier 3: Flashlight (* 2)
+
+Assistants: 
+    - Tier 0: None (0)
+    - Tier 1: Elves (5/s)
+    - Tier 2: Gnomes (10/s)
+    - Tier 3: Dwarves (ROCK. AND. STONE.) (20/s)
+
+Regular Meals (Unique):
+    - (^ 1.1)
+
+Better Housing (Unique?):
+    - (^ 1.1)
+
+Beard (Unique)
+    - (^ 1.2)
+
+Helmet (Unique):
+    - (* 1.5)
+
+Cartographer (Unique Assistant!):
+    - (* 3)
+
