@@ -19,6 +19,12 @@ class UserUpgrade(db.Model):
     # Añadir una columna INT para el tier de cada mejora
     # EL NOMBRE DE LA COLUMNA DEBE SER EXACTAMENTE IGUAL A INTERNAL_NAME EN UPGRADE
     pickaxe = db.Column(db.Integer, nullable=False, default=0)
+    lantern = db.Column(db.Integer, nullable=False, default=0)
+    assistant = db.Column(db.Integer, nullable = False, default = 0)
+    meals = db.Column(db.Integer, nullable = False, default = 0)
+    housing = db.Column(db.Integer, nullable = False, default = 0)
+    helmet = db.Column(db.Integer, nullable = False, default = 0)
+    cartographer = db.Column(db.Integer, nullable = False, default = 0)
 
 class Upgrade(db.Model):
     __tablename__ = 'upgrades'
@@ -31,17 +37,17 @@ class Upgrade(db.Model):
     # Nulo significa que no tiene se tier
 
     # Tier 1
-    value_tier_1 = db.Column(db.Integer, nullable=False) 
+    value_tier_1 = db.Column(db.Float, nullable=False) 
     name_tier_1 = db.Column(db.String(255), nullable=False)
     # Tier 2
-    value_tier_2 = db.Column(db.Integer, nullable=True)
+    value_tier_2 = db.Column(db.Float, nullable=True)
     name_tier_2 = db.Column(db.String(255), nullable=True)
     # Tier 3
-    value_tier_3 = db.Column(db.Integer, nullable=True)
+    value_tier_3 = db.Column(db.Float, nullable=True)
     name_tier_3 = db.Column(db.String(255), nullable=True)
     # Tier 4
-    value_tier_4 = db.Column(db.Integer, nullable=True)
+    value_tier_4 = db.Column(db.Float, nullable=True)
     name_tier_4 = db.Column(db.String(255), nullable=True)
     # Tier 5
-    value_tier_5 = db.Column(db.Integer, nullable=True)
+    value_tier_5 = db.Column(db.Float, nullable=True)
     name_tier_5 = db.Column(db.String(255), nullable=True)

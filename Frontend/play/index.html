@@ -12,7 +12,7 @@
         <ul style="list-style-type: none" id="upgradeShop"></ul>
       </shop>
       <div style="float: left; width: 40%">
-        <button onclick="calculatePoints()">
+        <button onclick="calculatePoints(currentValues)">
           <img
             id="cubeImage"
             src="/Data/Images/cubeStageOne.png"
@@ -37,16 +37,17 @@
         ></ul>
       </inventory>
     </div>
-    <script src="../scripts.js">
-
-      pointsUpdate();
-
+    <script src="../scripts.js"></script>
+    <script>
       var currentValues = {
         pointsTotal: 0,
         pointsSpent: 0,
-        pointsGain: 0,
-        pointsPassive: 0,
+        pointsGain: 5,
+        pointsPassive: 1,
       };
+
+      pointsUpdate(currentValues);
+      fetchAllUpgrades();
     </script>
   </body>
 </html>

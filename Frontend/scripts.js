@@ -1,10 +1,9 @@
-// Searches for the username given in the prompt
-// If found, opens the game page at their ID
-// Otherwise TODO
 function openUser() {
   userInput = prompt("What is your username?");
+
   fetch("http://localhost:5000/users/", { method: "GET" })
     .then((response) => response.json())
+
     .then((content) => {
       let found = false;
       for (let i = 0; i < content.length; i++) {
@@ -13,9 +12,44 @@ function openUser() {
           location.href = `/play/?user=${content[i].id}`;
         }
       }
+
       if (!found) {
-        // TODO
-        console.log("User not found :)");
+        // Acá lo que hacemos es un post
+        console.log("User not found, creating new user... :)");
+
+        const newUser = {
+          name: userInput,
+          total_points: 0,
+          spent_points: 0,
+        };
+
+        fetch("http://localhost:5000/users/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then(() => {
+            console.log("New user created");
+            fetch("http://localhost:5000/users/", { method: "GET" })
+              .then((response) => response.json())
+              .then((content) => {
+                for (let i = 0; i < content.length; i++) {
+                  if (content[i].name === userInput) {
+                    fetch(
+                      `http://localhost:5000/users/${content[i].id}/ugprades`,
+                      { method: "POST" }
+                    );
+                    location.href = `/play/?user=${content[i].id}`;
+                  }
+                }
+              });
+          })
+          .catch((error) => {
+            console.error("Error creating user:", error);
+            alert("Failed to create user");
+          });
       }
     });
 }
@@ -25,30 +59,47 @@ function returnUser() {
   return new URLSearchParams(window.location.search).get("user");
 }
 
-var currentValues = {
-  pointsTotal: 0,
-  pointsSpent: 0,
-  pointsGain: 0,
-  pointsPassive: 0,
-};
+function fetchUserUpgrades(currentValues) {
+  var currentValues = {
+    pointsTotal: 0,
+    pointsSpent: 0,
+    pointsGain: 5,
+    pointsPassive: 1,
+  };
+  let user_upgrades = [];
+  let all_upgrades = fetchAllUpgrades();
 
-function fetchUpgrades(currentValues) {}
+  let miningAddition = 0;
+  let miningMultiply = 1;
+  let miningExponent = 1;
+  let miningPassive = 0;
 
-// function fetchUpgrades() {
-//   // Fetch from backend
-//   let upgradeArray = [
-//     // This will be replaced by the fetch
-//     { Name: "Steel Pickaxe", Effect: "ADD", Value: 5 },
-//     { Name: "Electric Lantern", Effect: "MULTIPLY", Value: 2 },
-//     { Name: "Gnome Assistants", Effect: "PASSIVE", Value: 1 },
-//     { Name: "Good Meal", Effect: "EXPONENT", Value: 1 },
-//   ];
+  fetch(`http://localhost:5000/users/${returnUser()}/upgrades/`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((content) => {
+      user_upgrades = content;
+    });
+  for (let i = 0; i < user_upgrades.length; i++) {
+    if (upgradeArray[i].effect === "ADD") {
+    } else if (upgradeArray[i].effect === "MULTIPLY") {
+    } else if (upgradeArray[i].effect === "EXPONENT") {
+    } else if (upradeArray[i].effect === "PASSIVE") {
+    } else {
+      alert("Upgrade effect is not valid.");
+    }
+  }
+}
 
-//   miningValue = 0;
-//   miningPassive = 0;
-//   var miningAddition = 0;
-//   var miningMultiply = 1;
-//   var miningExponent = 1;
+function fetchAllUpgrades() {
+  fetch(`http://localhost:5000/upgrades/`, { method: "GET" })
+    .then((response) => response.json())
+    .then((content) => {
+      console.log(`All upgrades fetched.`);
+      return content;
+    });
+}
 
 //   for (let i = 0; i < upgradeArray.length; i++) {
 //     if (upgradeArray[i].Effect === "ADD") {
@@ -79,10 +130,13 @@ function pointsUpdate(currentValues) {
 }
 
 function calculatePoints(currentValues) {
-  fetchUpgrades(currentValues);
+  fetchUserUpgrades(currentValues);
   var timeSinceLastClick = 60; // Time in seconds since the last click
-  currentPoints += miningValue + miningPassive * timeSinceLastClick;
-  console.log(`Current points: ${currentPoints}`);
+  currentValues.pointsTotal +=
+    currentValues.pointsGain + currentValues.pointsPassive * timeSinceLastClick;
+  console.log(
+    `Current points: ${currentValues.pointsTotal - currentValues.pointDisplay}`
+  );
   pointsUpdate(currentValues);
 }
 
@@ -96,7 +150,7 @@ function updateUpgrades() {
   const shopList = document.getElementById("upgradeShop");
   inventoryList.innerHTML = "";
   shopList.innerHTML = "";
-  let userUpgrades = fetchUpgrades();
+  let userUpgrades = fetchUserUpgrades();
   // Do a fetch of all possible upgrades (From upgrades table)
   let exampleUpgradeList = [
     { Name: "Steel Pickaxe", Effect: "ADD", Value: 5 },
