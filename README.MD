@@ -1,7 +1,6 @@
 # Tutorial for launching the db and server using python, psql and flask-sqlalchemy
 
 - To start the database, open a terminal and run the following command:
-  - your_username and your_db correspond to the username you create with psql. The code in line 9 of app.py is for that same purpose
 
 ```
     psql -U your_username -h localhost -d your_db
