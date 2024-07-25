@@ -4,6 +4,7 @@
     <title>Qubit Quarry</title>
     <link rel="icon" type="image/x-icon" href="/Data/Images/favicon.png" />
   </head>
+
   <body>
     <h1><bold>Qubit Quarry</bold></h1>
     <h5>
@@ -18,47 +19,7 @@
       risus egestas mi, in congue diam lorem ut nulla.
     </h5>
     <button onclick="openUser()">Play!</button>
-    <p>The play button will open an alert that asks for the Username.</p>
-    <p>
-      If the username exists, will open /play/userID, otherwise will create it.
-    </p>
-    <a href="/trophies/">Trophies!</a>
 
-    <script>
-      function openUser() {
-        userInput = prompt("What is your username?");
-        // Add a fetch that finds the userID from that username, or creates a new one.
-
-        userID = 1; // REMOVE
-        location.href = `/play/?user=${userID}`;
-      }
-
-        function response_received(response) {
-            return response.json()
-        }
-
-        function parse_data(content) {
-            console.log(content)
-
-            const container = document.getElementById("users");
-            for (let index = 0; index < content.length; index++) {
-                const item = document.createElement("p");
-                item.innerHTML=content[index].name
-                container.append(item);
-            
-            }
-        }
-
-        function request_error(error) {
-            console.log("ERROR")
-            console.log(error);
-        }
-
-        fetch("http://localhost:5000/users")
-            .then(response_received)
-            .then(parse_data)
-            .catch(request_error)
-    
-    </script>
+    <script src="scripts.js"></script>
   </body>
 </html>
