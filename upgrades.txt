@@ -1,10 +1,3 @@
-Upgrades: 
-Disclaimer: Every upgrade has 5 tiers MAXIMUM. For now, we'll focus on one upgrade.
-Damage upgrades:
-Base damage: Base damage for the pickaxe: goes from 1, to 2, to 5, to 7 and to 10
-Multiplier: multiplies by 1.5x,2x,2.5x, 3x and 3.5x to the base damage of the pickaxe
-
-
 Pickaxe:
     - Tier 0: Bare Fists (0)
     - Tier 1: Iron Pickaxe (+5)
