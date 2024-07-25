@@ -50,10 +50,10 @@ def all_users():
             # Se definen valores predeterminados si no se proporcionan
             total_points = data.get('total_points', 0)
             spent_points = data.get('spent_points', 0)
-            new_upgradesr = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points) #removido el last_click hasta resolver lo del horario
-            db.session.add(new_upgradesr)
+            new_user = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points) #removido el last_click hasta resolver lo del horario
+            db.session.add(new_user)
             db.session.commit()
-            return jsonify({'user': {'id': new_upgradesr.id, 'name': new_upgradesr.name, 'total_points': new_upgradesr.total_points, 'spent_points': new_upgradesr.spent_points, 'last_click': new_upgradesr.last_click}}), 201
+            return jsonify({'user': {'id': new_user.id, 'name': new_user.name, 'total_points': new_user.total_points, 'spent_points': new_user.spent_points, 'last_click': new_user.last_click}}), 201
         except Exception as error:
             print(error)
             return jsonify({"message": "Couldn't create user."}), 500 # Esto no deberia pasar nunca
@@ -158,19 +158,29 @@ def get_upgrades_by_id(user_id):
     elif request.method=='POST':
         try:
             data = request.json
-            nuevo_nombre = data.get('name')         
+            #obtenemos el id del usuario en la tabla de userupgrades
+            nuevo_id = data.get('user_id')     
             # Se definen valores predeterminados si no se proporcionan
-            pickaxe = data.get('pickaxe', 0)
-            lantern = data.get('lantern', 0)
-            assistant = data.get('assistant', 0)
-            meals = data.get('meals', 0)
-            housing = data.get('housing', 0)
-            helmet = data.get('helmet', 0)
-            cartographer = data.get('cartographer', 0)
-            new_upgrades = UserUpgrade(name=nuevo_nombre, total_points=total_points, spent_points=spent_points)
+            new_pickaxe = data.get('pickaxe', 0)
+            new_lantern = data.get('lantern', 0)
+            new_assistant = data.get('assistant', 0)
+            new_meals = data.get('meals', 0)
+            new_housing = data.get('housing', 0)
+            new_helmet = data.get('helmet', 0)
+            new_cartographer = data.get('cartographer', 0)
+            new_upgrades = UserUpgrade(
+                user_id=nuevo_id,
+                pickaxe=new_pickaxe,
+                lantern=new_lantern,
+                assistant=new_assistant,
+                meals=new_meals,
+                housing=new_housing,
+                helmet=new_helmet,
+                cartographer=new_cartographer
+            )
             db.session.add(new_upgrades)
             db.session.commit()
-            return jsonify({'user': {'id': new_upgrades.id, 'name': new_upgrades.name, 'total_points': new_upgrades.total_points}}), 201
+            return jsonify({'user': {'id': new_upgrades.nuevo_id, 'pickaxe': new_upgrades.pickaxe, 'total_points': new_upgrades.total_points}}), 201
         except Exception as error:
             print(error)
             return jsonify({"message": "Couldn't create user."}), 500 # Esto no deberia pasar nunca
