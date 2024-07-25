@@ -1,12 +1,14 @@
 from flask import Flask, request, jsonify
-from models import db, User, Upgrade, UserUpgrade
 from flask_cors import CORS
+from models import db, User, Upgrade, UserUpgrade
+from editable import return_db_name
 
 app = Flask(__name__)
 CORS(app)
 port = 5000
+database = return_db_name()
 # Esta parte se debe cambiar la url de usar otra maquina
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://licha:1234@localhost:5432/mi_base'
+app.config['SQLALCHEMY_DATABASE_URI'] = database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 @app.route("/")

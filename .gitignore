@@ -1,1 +1,3 @@
 /Backend/.venv/
+/Backend/.virtualenv/
+/Backend/editable.py
