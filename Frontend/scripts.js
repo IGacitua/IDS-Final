@@ -1,27 +1,3 @@
-// Returns the current user
-
-//   for (let i = 0; i < upgradeArray.length; i++) {
-//     if (upgradeArray[i].Effect === "ADD") {
-//       miningAddition += upgradeArray[i].Value;
-//     } else if (upgradeArray[i].Effect === "MULTIPLY") {
-//       miningMultiply += upgradeArray[i].Value;
-//     } else if (upgradeArray[i].Effect === "EXPONENT") {
-//       miningExponent += upgradeArray[i].Value;
-//     } else if (upgradeArray[i].Effect === "PASSIVE") {
-//       miningPassive += upgradeArray[i].Value;
-//     } else {
-//       alert(
-//         `Invalid upgrade effect: ${upgradeArray[i].Effect} from ${upgradeArray[i].Name} upgrade`
-//       );
-//     }
-//   }
-//   console.log(
-//     `Addition: ${miningAddition}, Exponent: ${miningExponent}, Multiplier: ${miningMultiply}, Passive: ${miningPassive}`
-//   );
-//   miningValue = miningAddition ** miningExponent * miningMultiply;
-//   return upgradeArray;
-// }
-
 function pointsUpdate(currentValues) {
   const pointDisplay = document.getElementById("pointDisplay");
   pointDisplay.innerText = `Current Points: 

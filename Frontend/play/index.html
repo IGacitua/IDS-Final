@@ -12,7 +12,7 @@
         <ul style="list-style-type: none" id="upgradeShop"></ul>
       </shop>
       <div style="float: left; width: 40%">
-        <button onclick="fetchUserUpgrades(currentValues)">
+        <button onclick="fetchUserUpgrades()">
           <img
             id="cubeImage"
             src="/Data/Images/cubeStageOne.png"
@@ -49,7 +49,7 @@
         return new URLSearchParams(window.location.search).get("user");
       }
 
-      function fetchUserUpgrades(currentValues) {
+      function fetchUserUpgrades() {
         currentValues.pointsGain = 0;
         currentValues.pointsPassive = 0;
 
@@ -77,22 +77,27 @@
                   console.log(`Pickaxe value: ${content.pickaxe}`);
                   switch (content.pickaxe) {
                     case 1: {
+                      console.log(`Added ${all_upgrades[i].value_tier_1}`);
                       miningAddition += all_upgrades[i].value_tier_1;
                       break;
                     }
                     case 2: {
+                      console.log(`Added ${all_upgrades[i].value_tier_2}`);
                       miningAddition += all_upgrades[i].value_tier_2;
                       break;
                     }
                     case 3: {
+                      console.log(`Added ${all_upgrades[i].value_tier_3}`);
                       miningAddition += all_upgrades[i].value_tier_3;
                       break;
                     }
                     case 4: {
+                      console.log(`Added ${all_upgrades[i].value_tier_4}`);
                       miningAddition += all_upgrades[i].value_tier_4;
                       break;
                     }
                     case 5: {
+                      console.log(`Added ${all_upgrades[i].value_tier_5}`);
                       miningAddition += all_upgrades[i].value_tier_5;
                       break;
                     }
@@ -136,27 +141,36 @@
                 }
               } else if (all_upgrades[i].internal_name === "helmet") {
                 if (content.helmet > 0) {
+                  console.log(`Helmet Value: ${content.helmet}`);
                   miningMultiply += all_upgrades[i].value_tier_1;
                   break;
                 }
               } else if (all_upgrades[i].internal_name === "housing") {
                 if (content.housing > 0) {
+                  console.log(`Housing Value: ${content.housing}`);
                   miningExponent += all_upgrades[i].value_tier_1;
                 }
               } else if (all_upgrades[i].internal_name === "meals") {
                 if (content.meals > 0) {
-                  miningExpontent += all_upgrades[i].value_tier_1;
+                  console.log(`Meals Value: ${content.meals}`);
+                  miningExponent += all_upgrades[i].value_tier_1;
                 }
               } else if (all_upgrades[i].internal_name === "cartographer") {
                 if (content.cartographer > 0) {
+                  console.log(`Cartographer Value: ${content.cartographer}`);
                   miningMultiply *= all_upgrades[i].value_tier_1;
                 }
               } else {
                 console.log(`Invalid upgrade ${all_upgrades[i].internal_name}`);
               }
             }
+            currentValues.pointsPassive = miningPassive;
+            currentValues.pointsGain =
+              miningAddition ** miningExponent * miningMultiply;
+            console.log(
+              `Current User Values: ${JSON.stringify(currentValues)}`
+            );
           });
-        return currentValues;
       }
     </script>
   </body>
