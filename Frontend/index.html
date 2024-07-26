@@ -60,7 +60,7 @@
                 spent_points: 0,
               };
               newID = createUser(newUser);
-              //location.href = `/play/?user=${newID}`;
+              location.href = `/play/?user=${newID}`;
             }
           });
       }
@@ -80,26 +80,6 @@
               .then((content) => {
                 for (let i = 0; i < content.length; i++) {
                   if (content[i].name === userInput) {
-                    const emptyUpgrades = {
-                      user_id: content[i].id,
-                      pickaxe: 0,
-                      lantern: 0,
-                      assistant: 0,
-                      meals: 0,
-                      housing: 0,
-                      helmet: 0,
-                      cartographer: 0,
-                    };
-                    fetch(
-                      `http://localhost:5000/users/${content[i].id}/upgrades/`,
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(emptyUpgrades),
-                      }
-                    );
                     return content[i].id;
                   }
                 }
