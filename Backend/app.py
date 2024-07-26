@@ -144,8 +144,8 @@ def user_by_id(user_id):
 
     else:
         return jsonify({"message": "Method not allowed."}), 405
-
-
+    
+    
 @app.route("/users/<user_id>/upgrades/", methods=["GET", "POST", "PUT"])
 def get_upgrades_by_id(user_id):
     if request.method == 'GET':
@@ -168,47 +168,9 @@ def get_upgrades_by_id(user_id):
         except Exception as error:
             print(error)
             return jsonify({"message": f"Error when searching for user {user_id}."}), 500
-    elif request.method == 'POST':
-        try:
-            data = request.json
-            nuevo_id = data.get('user_id')
-            new_pickaxe = data.get('pickaxe', 0)
-            new_lantern = data.get('lantern', 0)
-            new_assistant = data.get('assistant', 0)
-            new_meals = data.get('meals', 0)
-            new_housing = data.get('housing', 0)
-            new_helmet = data.get('helmet', 0)
-            new_cartographer = data.get('cartographer', 0)
-            new_upgrades = UserUpgrade(
-                user_id=nuevo_id,
-                pickaxe=new_pickaxe,
-                lantern=new_lantern,
-                assistant=new_assistant,
-                meals=new_meals,
-                housing=new_housing,
-                helmet=new_helmet,
-                cartographer=new_cartographer
-            )
-            db.session.add(new_upgrades)
-            db.session.commit()
-            return jsonify({
-                'user': {
-                    'id': new_upgrades.user_id,
-                    'pickaxe': new_upgrades.pickaxe,
-                    'lantern': new_upgrades.lantern,
-                    'assistant': new_upgrades.assistant,
-                    'meals': new_upgrades.meals,
-                    'housing': new_upgrades.housing,
-                    'helmet': new_upgrades.helmet,
-                    'cartographer': new_upgrades.cartographer
-                }
-            }), 201
-        except Exception as error:
-            print(error)
-            return jsonify({"message": "Couldn't create user."}), 500 # Esto no deberia pasar nunca
-    
+   
     elif request.method=='PUT':
-        try:
+        try: #ver si cambiar el user_id para evitar confusiones
             upgrades=UserUpgrade.query.filter_by(user_id=user_id).first()
             if not upgrades:
                 return jsonify({"message": f"User {user_id} not found."}), 404
