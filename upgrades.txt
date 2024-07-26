@@ -16,7 +16,7 @@ Assistants:
     - Tier 0: None (0)
     - Tier 1: Elves (5/s)
     - Tier 2: Gnomes (10/s)
-    - Tier 3: Dwarves (ROCK. AND. STONE.) (20/s)
+    - Tier 3: Dwarves (20/s)
 
 Regular Meals (Unique):
     - (^ 1.1)
