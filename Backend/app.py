@@ -136,7 +136,13 @@ def get_upgrades_by_id(user_id):
 
     if request.method=='GET':
         try:
-            upgrades = UserUpgrade.query.get(user_id)
+            #Verificar si el usuario existe
+            user=db.session.get(User,user_id) #db.session.get() busca de forma más rapida
+            if not user:
+                return jsonify({"message": f"User with id={user_id} not found."}),404
+
+            
+            upgrades = UserUpgrade.query.filter_by(user_id=user_id).first()
             if upgrades:
                 user_upgrades = {
                     "user_id": upgrades.user_id,
@@ -157,6 +163,12 @@ def get_upgrades_by_id(user_id):
 
     elif request.method=='POST':
         try:
+            #Consulta si el usuario existe, si existe continua sino devuevle mensaje
+            user = db.session.get(User, user_id)
+            if not user:
+                return jsonify({"message": f"User {user_id} not found."}), 404
+
+            
             data = request.json
             #obtenemos el id del usuario en la tabla de userupgrades
             nuevo_id = data.get('user_id')     
@@ -180,14 +192,42 @@ def get_upgrades_by_id(user_id):
             )
             db.session.add(new_upgrades)
             db.session.commit()
-            return jsonify({'user': {'id': new_upgrades.nuevo_id, 'pickaxe': new_upgrades.pickaxe, 'total_points': new_upgrades.total_points}}), 201
+            return jsonify({
+                'user': {
+                    'id': new_upgrades.nuevo_id, 
+                    'pickaxe': new_upgrades.pickaxe, 
+                    'total_points': new_upgrades.total_points
+                }
+            }), 201
+
         except Exception as error:
             print(error)
             return jsonify({"message": "Couldn't create user."}), 500 # Esto no deberia pasar nunca
+    
+    elif request.method=='PUT':
+        try:
+            upgrades=UserUpgrade.query.filter_by(user_id=user_id).first
+            if not upgrades:
+                return jsonify({"message": f"User {user_id} not found."}), 404
+
+            data=request.json
+            upgrades.pickaxe=data.get('pickaxe', upgrades.pickaxe)
+            upgrades.lantern=data.get('lantern',upgrades.lantern)
+            upgrades.assistant=data.get('assistant',upgrades.assistant)
+            upgrades.meals=data.get('meals',upgrades.meals)
+            upgrades.housing=data.get('housing',upgrades.housing)
+            upgrades.helmet=data.get('helmet',upgrades.helmet)
+            upgrades.cartographer=data.get('cartographer',upgrades.cartographer)
+
+            db.session.commit()
+            return jsonify({"message": "Upgrades updated succesfully."}), 200
+                
+        except Exception as error:
+            print(error)
+            return jsonify({"message": "Couldn't update user upgrades."}), 500
+        
     else:
         return jsonify({"message": "Method not allowed."}), 405
-    # elif request.method=='PUT':
-
 @app.route("/upgrades/", methods=["GET"])
 def get_all_upgrades():
 
