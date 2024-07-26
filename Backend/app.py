@@ -50,10 +50,25 @@ def all_users():
             # Se definen valores predeterminados si no se proporcionan
             total_points = data.get('total_points', 0)
             spent_points = data.get('spent_points', 0)
-            new_upgradesr = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points) #removido el last_click hasta resolver lo del horario
-            db.session.add(new_upgradesr)
+            new_user = User(name=nuevo_nombre, total_points=total_points, spent_points=spent_points) #removido el last_click hasta resolver lo del horario
+            db.session.add(new_user)
             db.session.commit()
-            return jsonify({'user': {'id': new_upgradesr.id, 'name': new_upgradesr.name, 'total_points': new_upgradesr.total_points, 'spent_points': new_upgradesr.spent_points, 'last_click': new_upgradesr.last_click}}), 201
+
+            new_upgrades = UserUpgrade(user_id=new_user.id)
+            db.session.add(new_upgrades)
+            db.session.commit()
+
+
+            return jsonify({'user': {'id': new_user.id, 'name': new_user.name, 'total_points': new_user.total_points, 'spent_points': new_user.spent_points, 
+                    'upgrades': {
+                    'pickaxe': new_upgrades.pickaxe,
+                    'lantern': new_upgrades.lantern,
+                    'assistant': new_upgrades.assistant,
+                    'meals': new_upgrades.meals,
+                    'housing': new_upgrades.housing,
+                    'helmet': new_upgrades.helmet,
+                    'cartographer': new_upgrades.cartographer
+                }}}), 201
         except Exception as error:
             print(error)
             return jsonify({"message": "Couldn't create user."}), 500 # Esto no deberia pasar nunca
@@ -131,12 +146,11 @@ def user_by_id(user_id):
         return jsonify({"message": "Method not allowed."}), 405
 
 
-@app.route("/users/<user_id>/upgrades/",methods=["GET", "POST", "PUT"])
+@app.route("/users/<user_id>/upgrades/", methods=["GET", "POST", "PUT"])
 def get_upgrades_by_id(user_id):
-
-    if request.method=='GET':
+    if request.method == 'GET':
         try:
-            upgrades = UserUpgrade.query.get(user_id)
+            upgrades = UserUpgrade.query.filter_by(user_id=user_id).first()
             if upgrades:
                 user_upgrades = {
                     "user_id": upgrades.user_id,
@@ -154,30 +168,70 @@ def get_upgrades_by_id(user_id):
         except Exception as error:
             print(error)
             return jsonify({"message": f"Error when searching for user {user_id}."}), 500
-
-    elif request.method=='POST':
+    elif request.method == 'POST':
         try:
             data = request.json
-            nuevo_nombre = data.get('name')         
-            # Se definen valores predeterminados si no se proporcionan
-            pickaxe = data.get('pickaxe', 0)
-            lantern = data.get('lantern', 0)
-            assistant = data.get('assistant', 0)
-            meals = data.get('meals', 0)
-            housing = data.get('housing', 0)
-            helmet = data.get('helmet', 0)
-            cartographer = data.get('cartographer', 0)
-            #new_upgrades = UserUpgrade(name=nuevo_nombre, total_points=total_points, spent_points=spent_points)
-            new_upgrades = UserUpgrade(name=nuevo_nombre, pickaxe = pickaxe, lantern = lantern, assistant = assistant, meals = meals, housing = housing, helmet = helmet, cartographer = cartographer)
+            nuevo_id = data.get('user_id')
+            new_pickaxe = data.get('pickaxe', 0)
+            new_lantern = data.get('lantern', 0)
+            new_assistant = data.get('assistant', 0)
+            new_meals = data.get('meals', 0)
+            new_housing = data.get('housing', 0)
+            new_helmet = data.get('helmet', 0)
+            new_cartographer = data.get('cartographer', 0)
+            new_upgrades = UserUpgrade(
+                user_id=nuevo_id,
+                pickaxe=new_pickaxe,
+                lantern=new_lantern,
+                assistant=new_assistant,
+                meals=new_meals,
+                housing=new_housing,
+                helmet=new_helmet,
+                cartographer=new_cartographer
+            )
             db.session.add(new_upgrades)
             db.session.commit()
-            return jsonify({'user': {'id': new_upgrades.id, 'name': new_upgrades.name, 'total_points': new_upgrades.total_points}}), 201
+            return jsonify({
+                'user': {
+                    'id': new_upgrades.user_id,
+                    'pickaxe': new_upgrades.pickaxe,
+                    'lantern': new_upgrades.lantern,
+                    'assistant': new_upgrades.assistant,
+                    'meals': new_upgrades.meals,
+                    'housing': new_upgrades.housing,
+                    'helmet': new_upgrades.helmet,
+                    'cartographer': new_upgrades.cartographer
+                }
+            }), 201
         except Exception as error:
             print(error)
-            return jsonify({"message": "Couldn't create upgrades."}), 500 # Esto no deberia pasar nunca
+            return jsonify({"message": "Couldn't create user."}), 500 # Esto no deberia pasar nunca
+    
+    elif request.method=='PUT':
+        try:
+            upgrades=UserUpgrade.query.filter_by(user_id=user_id).first()
+            if not upgrades:
+                return jsonify({"message": f"User {user_id} not found."}), 404
+
+            data=request.json
+            upgrades.pickaxe=data.get('pickaxe', upgrades.pickaxe)
+            upgrades.lantern=data.get('lantern',upgrades.lantern)
+            upgrades.assistant=data.get('assistant',upgrades.assistant)
+            upgrades.meals=data.get('meals',upgrades.meals)
+            upgrades.housing=data.get('housing',upgrades.housing)
+            upgrades.helmet=data.get('helmet',upgrades.helmet)
+            upgrades.cartographer=data.get('cartographer',upgrades.cartographer)
+
+            db.session.commit()
+            return jsonify({"message": "Upgrades updated succesfully."}), 200
+                
+        except Exception as error:
+            print(error)
+            return jsonify({"message": "Couldn't update user upgrades."}), 500
+        
     else:
         return jsonify({"message": "Method not allowed."}), 405
-    # elif request.method=='PUT':
+
 
 @app.route("/upgrades/", methods=["GET"])
 def get_all_upgrades():
