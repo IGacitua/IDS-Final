@@ -36,6 +36,32 @@
     </button>
 
     <script>
+      function createUser(newUser) {
+        fetch("http://localhost:5000/users/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then(() => {
+            console.log("New user created");
+            fetch("http://localhost:5000/users/", { method: "GET" })
+              .then((response) => response.json())
+              .then((content) => {
+                for (let i = 0; i < content.length; i++) {
+                  if (content[i].name === userInput) {
+                    location.href = `/play/?user=${content[i].id}`;
+                  }
+                }
+              });
+          })
+          .catch((error) => {
+            console.error("Error creating user:", error);
+            alert("Failed to create user");
+          });
+      }
+
       function openUser() {
         userInput = prompt("What is your username?");
 
@@ -53,41 +79,13 @@
 
             if (!found) {
               console.log("User not found, creating new user... :)");
-
               const newUser = {
                 name: userInput,
                 total_points: 0,
                 spent_points: 0,
               };
-              newID = createUser(newUser);
-              location.href = `/play/?user=${newID}`;
+              createUser(newUser);
             }
-          });
-      }
-
-      function createUser(newUser) {
-        fetch("http://localhost:5000/users/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newUser),
-        })
-          .then(() => {
-            console.log("New user created");
-            fetch("http://localhost:5000/users/", { method: "GET" })
-              .then((response) => response.json())
-              .then((content) => {
-                for (let i = 0; i < content.length; i++) {
-                  if (content[i].name === userInput) {
-                    return content[i].id;
-                  }
-                }
-              });
-          })
-          .catch((error) => {
-            console.error("Error creating user:", error);
-            alert("Failed to create user");
           });
       }
     </script>
