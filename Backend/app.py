@@ -167,13 +167,14 @@ def get_upgrades_by_id(user_id):
             housing = data.get('housing', 0)
             helmet = data.get('helmet', 0)
             cartographer = data.get('cartographer', 0)
-            new_upgrades = UserUpgrade(name=nuevo_nombre, total_points=total_points, spent_points=spent_points)
+            #new_upgrades = UserUpgrade(name=nuevo_nombre, total_points=total_points, spent_points=spent_points)
+            new_upgrades = UserUpgrade(name=nuevo_nombre, pickaxe = pickaxe, lantern = lantern, assistant = assistant, meals = meals, housing = housing, helmet = helmet, cartographer = cartographer)
             db.session.add(new_upgrades)
             db.session.commit()
             return jsonify({'user': {'id': new_upgrades.id, 'name': new_upgrades.name, 'total_points': new_upgrades.total_points}}), 201
         except Exception as error:
             print(error)
-            return jsonify({"message": "Couldn't create user."}), 500 # Esto no deberia pasar nunca
+            return jsonify({"message": "Couldn't create upgrades."}), 500 # Esto no deberia pasar nunca
     else:
         return jsonify({"message": "Method not allowed."}), 405
     # elif request.method=='PUT':

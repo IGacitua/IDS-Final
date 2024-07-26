@@ -39,15 +39,8 @@
     </div>
     <script src="../scripts.js"></script>
     <script>
-      var currentValues = {
-        pointsTotal: 0,
-        pointsSpent: 0,
-        pointsGain: 5,
-        pointsPassive: 1,
-      };
-
-      pointsUpdate(currentValues);
-      fetchAllUpgrades();
+      let currentValues = fetchUserUpgrades();
+      //pointsUpdate(currentValues);
     </script>
   </body>
 </html>

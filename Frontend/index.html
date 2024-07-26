@@ -35,6 +35,81 @@
       Play!
     </button>
 
-    <script src="scripts.js"></script>
+    <script>
+      function openUser() {
+        userInput = prompt("What is your username?");
+
+        fetch("http://localhost:5000/users/", { method: "GET" })
+          .then((response) => response.json())
+
+          .then((content) => {
+            let found = false;
+            for (let i = 0; i < content.length; i++) {
+              if (content[i].name === userInput) {
+                found = true;
+                location.href = `/play/?user=${content[i].id}`;
+              }
+            }
+
+            if (!found) {
+              console.log("User not found, creating new user... :)");
+
+              const newUser = {
+                name: userInput,
+                total_points: 0,
+                spent_points: 0,
+              };
+              newID = createUser(newUser);
+              //location.href = `/play/?user=${newID}`;
+            }
+          });
+      }
+
+      function createUser(newUser) {
+        fetch("http://localhost:5000/users/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then(() => {
+            console.log("New user created");
+            fetch("http://localhost:5000/users/", { method: "GET" })
+              .then((response) => response.json())
+              .then((content) => {
+                for (let i = 0; i < content.length; i++) {
+                  if (content[i].name === userInput) {
+                    const emptyUpgrades = {
+                      name: newUser.name,
+                      pickaxe: 0,
+                      lantern: 0,
+                      assistant: 0,
+                      meals: 0,
+                      housing: 0,
+                      helmet: 0,
+                      cartographer: 0,
+                    };
+                    fetch(
+                      `http://localhost:5000/users/${content[i].id}/upgrades/`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(emptyUpgrades),
+                      }
+                    );
+                    return content[i].id;
+                  }
+                }
+              });
+          })
+          .catch((error) => {
+            console.error("Error creating user:", error);
+            alert("Failed to create user");
+          });
+      }
+    </script>
   </body>
 </html>

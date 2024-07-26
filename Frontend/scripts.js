@@ -1,66 +1,10 @@
-function openUser() {
-  userInput = prompt("What is your username?");
-
-  fetch("http://localhost:5000/users/", { method: "GET" })
-    .then((response) => response.json())
-
-    .then((content) => {
-      let found = false;
-      for (let i = 0; i < content.length; i++) {
-        if (content[i].name === userInput) {
-          found = true;
-          location.href = `/play/?user=${content[i].id}`;
-        }
-      }
-
-      if (!found) {
-        // Acá lo que hacemos es un post
-        console.log("User not found, creating new user... :)");
-
-        const newUser = {
-          name: userInput,
-          total_points: 0,
-          spent_points: 0,
-        };
-
-        fetch("http://localhost:5000/users/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newUser),
-        })
-          .then(() => {
-            console.log("New user created");
-            fetch("http://localhost:5000/users/", { method: "GET" })
-              .then((response) => response.json())
-              .then((content) => {
-                for (let i = 0; i < content.length; i++) {
-                  if (content[i].name === userInput) {
-                    fetch(
-                      `http://localhost:5000/users/${content[i].id}/ugprades`,
-                      { method: "POST" }
-                    );
-                    location.href = `/play/?user=${content[i].id}`;
-                  }
-                }
-              });
-          })
-          .catch((error) => {
-            console.error("Error creating user:", error);
-            alert("Failed to create user");
-          });
-      }
-    });
-}
-
 // Returns the current user
 function returnUser() {
   return new URLSearchParams(window.location.search).get("user");
 }
 
 function fetchUserUpgrades(currentValues) {
-  var currentValues = {
+  let currentValues = {
     pointsTotal: 0,
     pointsSpent: 0,
     pointsGain: 5,
@@ -82,14 +26,19 @@ function fetchUserUpgrades(currentValues) {
       user_upgrades = content;
     });
   for (let i = 0; i < user_upgrades.length; i++) {
-    if (upgradeArray[i].effect === "ADD") {
+    if (user_upgrades[i].effect === "ADD") {
+      console.log(`Addition upgrade: ${user_upgrades[i].name}`);
     } else if (upgradeArray[i].effect === "MULTIPLY") {
+      console.log(`Multiplication upgrade: ${user_upgrades[i].name}`);
     } else if (upgradeArray[i].effect === "EXPONENT") {
+      console.log(`Exponential upgrade: ${user_upgrades[i].name}`);
     } else if (upradeArray[i].effect === "PASSIVE") {
+      console.log(`Passive upgrade: ${user_upgrades[i].name}`);
     } else {
       alert("Upgrade effect is not valid.");
     }
   }
+  return currentValues;
 }
 
 function fetchAllUpgrades() {
@@ -145,48 +94,48 @@ function buyUpgrade(name) {
   updateUpgrades();
 }
 
-function updateUpgrades() {
-  const inventoryList = document.getElementById("upgradeInventory");
-  const shopList = document.getElementById("upgradeShop");
-  inventoryList.innerHTML = "";
-  shopList.innerHTML = "";
-  let userUpgrades = fetchUserUpgrades();
-  // Do a fetch of all possible upgrades (From upgrades table)
-  let exampleUpgradeList = [
-    { Name: "Steel Pickaxe", Effect: "ADD", Value: 5 },
-    { Name: "Qubit Pickaxe", Effect: "ADD", Value: 25 },
-    { Name: "Basic Lantern", Effect: "MULTIPLY", Value: 1.5 },
-    { Name: "Electric Lantern", Effect: "MULTIPLY", Value: 2 },
-    { Name: "Gnome Assistants", Effect: "PASSIVE", Value: 1 },
-    { Name: "Good Meal", Effect: "EXPONENT", Value: 1 },
-  ];
+// function updateUpgrades() {
+//   const inventoryList = document.getElementById("upgradeInventory");
+//   const shopList = document.getElementById("upgradeShop");
+//   inventoryList.innerHTML = "";
+//   shopList.innerHTML = "";
+//   let userUpgrades = fetchUserUpgrades();
+//   // Do a fetch of all possible upgrades (From upgrades table)
+//   let exampleUpgradeList = [
+//     { Name: "Steel Pickaxe", Effect: "ADD", Value: 5 },
+//     { Name: "Qubit Pickaxe", Effect: "ADD", Value: 25 },
+//     { Name: "Basic Lantern", Effect: "MULTIPLY", Value: 1.5 },
+//     { Name: "Electric Lantern", Effect: "MULTIPLY", Value: 2 },
+//     { Name: "Gnome Assistants", Effect: "PASSIVE", Value: 1 },
+//     { Name: "Good Meal", Effect: "EXPONENT", Value: 1 },
+//   ];
 
-  for (let i = 0; i < exampleUpgradeList.length; i++) {
-    found = false;
-    for (let j = 0; j < userUpgrades.length; j++) {
-      if (exampleUpgradeList[i].Name == userUpgrades[j].Name) {
-        found = true;
-        break;
-      }
-    }
-    if (found) {
-      const inventoryElement = document.createElement("li");
-      inventoryElement.innerText = exampleUpgradeList[i].Name;
-      inventoryList.appendChild(inventoryElement);
-    } else {
-      const shopElement = document.createElement("li");
-      shopElement.innerText = exampleUpgradeList[i].Name;
-      const elementButton = document.createElement("button");
-      elementButton.innerText = "Buy";
-      elementButton.addEventListener("click", () => {
-        buyUpgrade(exampleUpgradeList[i].Name);
-      });
-      shopElement.appendChild(elementButton);
-      shopList.appendChild(shopElement);
-    }
-  }
-}
-updateUpgrades();
+//   for (let i = 0; i < exampleUpgradeList.length; i++) {
+//     found = false;
+//     for (let j = 0; j < userUpgrades.length; j++) {
+//       if (exampleUpgradeList[i].Name == userUpgrades[j].Name) {
+//         found = true;
+//         break;
+//       }
+//     }
+//     if (found) {
+//       const inventoryElement = document.createElement("li");
+//       inventoryElement.innerText = exampleUpgradeList[i].Name;
+//       inventoryList.appendChild(inventoryElement);
+//     } else {
+//       const shopElement = document.createElement("li");
+//       shopElement.innerText = exampleUpgradeList[i].Name;
+//       const elementButton = document.createElement("button");
+//       elementButton.innerText = "Buy";
+//       elementButton.addEventListener("click", () => {
+//         buyUpgrade(exampleUpgradeList[i].Name);
+//       });
+//       shopElement.appendChild(elementButton);
+//       shopList.appendChild(shopElement);
+//     }
+//   }
+// }
+// updateUpgrades();
 
 function regularFetch() {
   console.log("A fetch would have been executed right now!");
