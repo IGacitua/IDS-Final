@@ -30,7 +30,7 @@ def all_users():
     elif request.method == "POST":
         return create_user()
     else:
-        return jsnoify({"message": "Method not allowed."}), 405
+        return jsonify({"message": "Method not allowed."}), 405
 
 def list_users():
     try:
@@ -96,45 +96,9 @@ def user_by_id(user_id):
         return update_user(user_id)
     elif request.method == "DELETE":
         return delete_user(user_id)
-    #Nueva funcion para aumnetar los puntos (esto deberia no usarse?)
-    elif request.method == "POST":
-        return update_points(user_id)
     else:
         return jsonify({"message": "Method not allowed."}), 405
-
-#El problema que toma el except, capaz no hay que usarlo de esta manera
-def update_points(user_id):
-            try:
-                user = User.query.get(user_id)
-                if not user:
-                    print(f"User {user_id} not found.")
-                    return jsonify({"message": f"User {user_id} not found."}), 404
-        
-                data = request.json
-                print(f"Data received: {data}")
-                points_to_add = data.get('points', 0)  # Puntos a agregar, se espera que vengan en el cuerpo del POST request
-        
-                user.total_points += points_to_add
-                user.last_click = int(time.time())  # Actualiza el tiempo del último clic
-                user.update_current_points()  # Actualiza los puntos actuales
-        
-                db.session.commit()  # Guarda los cambios en la base de datos
-        
-                return jsonify({
-                    'id': user.id,
-                    'name': user.name,
-                    'total_points': user.total_points,
-                    'spent_points': user.spent_points,
-                    'current_points': user.current_points,
-                    'last_click': user.last_click
-                }), 200
-        
-            except Exception as error:
-                print("Error:", error)
-                return jsonify({"message": "Error when updating points."}), 500
-        
-
-                
+                   
 #Funcion para obtener user segun id
 def get_user(user_id):
     try:
@@ -167,6 +131,8 @@ def update_user(user_id):
                 user.total_points = data['total_points']
             if 'spent_points' in data:
                 user.spent_points = data['spent_points']
+            if 'last_click' in data:
+                user.last_click = data['last_click']
             db.session.commit()
             return jsonify({"Mensaje": f"User with id:{user_id} updated"}), 200
         else:

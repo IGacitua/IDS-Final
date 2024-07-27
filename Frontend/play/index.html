@@ -12,7 +12,7 @@
         <ul style="list-style-type: none" id="upgradeShop"></ul>
       </shop>
       <div style="float: left; width: 40%">
-        <button onclick="updatePoints()">
+        <button onclick="updatePoints(1)">
           <img
             id="cubeImage"
             src="/Data/Images/cubeStageOne.png"
@@ -41,8 +41,9 @@
       var currentValues = {
         pointsTotal: 0,
         pointsSpent: 0,
-        pointsGain: 5,
-        pointsPassive: 1,
+        pointsGain: 1,
+        pointsPassive: 0,
+        lastClick: 0,
       };
 
       function returnUser() {
@@ -50,7 +51,7 @@
       }
 
       function fetchUserUpgrades() {
-        currentValues.pointsGain = 0;
+        currentValues.pointsGain = 1;
         currentValues.pointsPassive = 0;
 
         let all_upgrades;
@@ -172,48 +173,53 @@
             );
           });
       }
-      function updatePoints() {
-              const userId = returnUser();
-              const pointsToAdd = currentValues.pointsGain;
-              
-              fetch(`http://localhost:5000/users/${userId}/`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ points: pointsToAdd }),
-              })
-              .then((response) => response.json())
-              .then((data) => {
-                if (data.id) {
-                  currentValues.pointsTotal = data.total_points;
-                  document.getElementById('pointDisplay').innerText = `Total Points: ${currentValues.pointsTotal}`;
-                } else {
-                  console.log('Error updating points:', data);
-                }
-              })
-              .catch((error) => {
-                console.log('Request failed', error);
-              });
-            }
-      
-            // Initial fetch to display user points
-            document.addEventListener('DOMContentLoaded', (event) => {
-              const userId = returnUser();
-              fetch(`http://localhost:5000/users/${userId}/`, {
-                method: "GET",
-              })
-              .then((response) => response.json())
-              .then((data) => {
-                if (data.id) {
-                  currentValues.pointsTotal = data.total_points;
-                  document.getElementById('pointDisplay').innerText = `Total Points: ${currentValues.pointsTotal}`;
-                }
+
+      function updatePoints(variation) {
+        const userID = returnUser();
+        let timeSpent;
+
+        fetch(`http://localhost:5000/users/${userID}`, { method: "GET" })
+          .then((response) => response.json())
+          .then((content) => {
+            currentValues.pointsTotal = content.total_points;
+            currentValues.lastClick = content.last_click;
+            timeSpent = Math.floor(Date.now() / 1000) - currentValues.lastClick;
+          })
+          .then(() => {
+            fetch(`http://localhost:5000/users/${userID}/`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                total_points:
+                  currentValues.pointsTotal +
+                  currentValues.pointsGain * variation +
+                  currentValues.pointsPassive * timeSpent,
+                last_click: Math.floor(Date.now() / 1000),
+              }),
+            })
+              .then(() => {
+                currentValues.pointsTotal +=
+                  currentValues.pointsGain * variation +
+                  currentValues.pointsPassive * timeSpent;
+                updatePointDisplay();
               })
               .catch((error) => {
-                console.log('Request failed', error);
+                console.log("Request failed", error);
               });
-            });
+          });
+      }
+
+      function updatePointDisplay() {
+        const pointDisplay = document.getElementById("pointDisplay");
+        pointDisplay.innerText = `Current Points:
+        ${Math.floor(currentValues.pointsTotal - currentValues.pointsSpent)}`;
+      }
+
+      updatePoints(0);
+      fetchUserUpgrades();
+      updatePointDisplay();
     </script>
   </body>
 </html>

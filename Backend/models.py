@@ -9,7 +9,7 @@ class User(db.Model):
     name = db.Column(db.String(255), unique=True, nullable=False)
     total_points = db.Column(db.Integer, default=0) # Todos los puntos que ganó el usuario, sin considerar gastos. Se usa para ver la etapa del juego
     spent_points = db.Column(db.Integer, default=0) # Los puntos que gastó el usuario. Usados para calcular puntos actuales
-    current_points = db.Column(db.Integer, default=0) #Añado columna de punto actuales para modificar la columna de total_points (esto tmb queda a revision)
+    #current_points = db.Column(db.Integer, default=0) #Añado columna de punto actuales para modificar la columna de total_points (esto tmb queda a revision)
     last_click = db.Column(db.Integer, default=int(time.time())) # Momento del ultimo clic. Se usa para calcular los puntos que deben dar las mejoras pasivas.
     upgrades=db.relationship('UserUpgrade', uselist=False, backref='User', lazy=True) # Uselist relaciona uno-uno
     # Agregar una columna para el tier de cada mejora
