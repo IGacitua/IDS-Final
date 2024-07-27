@@ -16,7 +16,7 @@ INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, value_tier_2, name_tier_2, value_tier_3, name_tier_3
     ) 
 VALUES (
-    'assistant', 5, 'Elves', 10, 'Gnomes', 20, 'Dwarves'
+    'assistant', 'PASSIVE', 5, 'Elves', 10, 'Gnomes', 20, 'Dwarves'
 );
 
 INSERT INTO upgrades (
