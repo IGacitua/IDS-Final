@@ -38,6 +38,8 @@
       </inventory>
     </div>
     <script>
+      const hostURL = "http://localhost:5000";
+
       var currentValues = {
         pointsTotal: 0,
         pointsSpent: 0,
@@ -50,13 +52,13 @@
         return new URLSearchParams(window.location.search).get("user");
       }
 
-      function fetchUserUpgrades() {
+      function updateMiningValues() {
         currentValues.pointsGain = 0;
         currentValues.pointsPassive = 0;
 
         let all_upgrades;
 
-        fetch(`http://localhost:5000/upgrades/`, { method: "GET" })
+        fetch(`${hostURL}/upgrades/`, { method: "GET" })
           .then((response) => response.json())
           .then((content) => {
             all_upgrades = content;
@@ -67,7 +69,7 @@
         let miningExponent = 1;
         let miningPassive = 0;
 
-        fetch(`http://localhost:5000/users/${returnUser()}/upgrades/`, {
+        fetch(`${hostURL}/users/${returnUser()}/upgrades/`, {
           method: "GET",
         })
           .then((response) => response.json())
@@ -174,7 +176,7 @@
         const userID = returnUser();
         let timeSpent;
 
-        fetch(`http://localhost:5000/users/${userID}`, { method: "GET" })
+        fetch(`${hostURL}/users/${userID}`, { method: "GET" })
           .then((response) => response.json())
           .then((content) => {
             currentValues.pointsTotal = content.total_points;
@@ -182,7 +184,7 @@
             timeSpent = Math.floor(Date.now() / 1000) - currentValues.lastClick;
           })
           .then(() => {
-            fetch(`http://localhost:5000/users/${userID}/`, {
+            fetch(`${hostURL}/users/${userID}/`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
@@ -213,9 +215,277 @@
         ${Math.floor(currentValues.pointsTotal - currentValues.pointsSpent)}`;
       }
 
+      function buyUpgrade(internalName, tier) {
+        alert(`${internalName}, tier ${tier} was bought.`);
+        updateInventory();
+        updateMiningValues();
+        updateUpgrades(); // After EVERYTHING executes, update upgrade lists and mining values
+      }
+
+      function addToList(name, list, internal_name, tier) {
+        const listItem = document.createElement("li");
+        listItem.innerText = name;
+        if (list === "inventory") {
+          const inventory = document.getElementById("upgradeInventory");
+          inventory.appendChild(listItem);
+        } else if (list === "shop") {
+          const shop = document.getElementById("upgradeShop");
+          const itemButton = document.createElement("button");
+          itemButton.innerText = "Buy";
+          itemButton.addEventListener("click", () => {
+            buyUpgrade(internal_name, tier);
+          });
+          listItem.appendChild(itemButton);
+          shop.appendChild(listItem);
+        }
+      }
+
+      function updateInventory() {
+        const upgradeShop = document.getElementById("upgradeShop");
+        const upgradeInventory = document.getElementById("upgradeInventory");
+
+        let all_upgrades;
+
+        fetch(`${hostURL}/upgrades/`, { method: "GET" })
+          .then((response) => response.json())
+          .then((content) => {
+            all_upgrades = content;
+          })
+          .then(
+            fetch(`${hostURL}/users/${returnUser()}/upgrades`, {
+              method: "GET",
+            })
+              .then((response) => response.json())
+              .then((content) => {
+                upgradeShop.innerHTML = "";
+                upgradeInventory.innerHTML = "";
+                for (let i = 0; i < all_upgrades.length; i++) {
+                  if (all_upgrades[i].internal_name === "pickaxe") {
+                    switch (content.pickaxe) {
+                      case 0: {
+                        addToList(
+                          all_upgrades[i].name_tier_1,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          1
+                        );
+                        addToList("Bare Fists", "inventory");
+                        break;
+                      }
+                      case 1: {
+                        addToList(
+                          all_upgrades[i].name_tier_2,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          2
+                        );
+                        addToList(all_upgrades[i].name_tier_1, "inventory");
+                        break;
+                      }
+                      case 2: {
+                        addToList(
+                          all_upgrades[i].name_tier_3,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          3
+                        );
+                        addToList(all_upgrades[i].name_tier_2, "inventory");
+                        break;
+                      }
+                      case 3: {
+                        addToList(
+                          all_upgrades[i].name_tier_4,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          4
+                        );
+                        addToList(all_upgrades[i].name_tier_3, "inventory");
+                        break;
+                      }
+                      case 4: {
+                        addToList(
+                          all_upgrades[i].name_tier_5,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          5
+                        );
+                        addToList(all_upgrades[i].name_tier_4, "inventory");
+                        break;
+                      }
+                      case 5: {
+                        addToList(all_upgrades[i].name_tier_5, "inventory");
+                        break;
+                      }
+                    }
+                  } else if (all_upgrades[i].internal_name === "lantern") {
+                    switch (content.lantern) {
+                      case 0: {
+                        addToList(
+                          all_upgrades[i].name_tier_1,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          1
+                        );
+                        break;
+                      }
+                      case 1: {
+                        addToList(
+                          all_upgrades[i].name_tier_2,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          2
+                        );
+                        addToList(all_upgrades[i].name_tier_1, "inventory");
+                        break;
+                      }
+                      case 2: {
+                        addToList(
+                          all_upgrades[i].name_tier_3,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          3
+                        );
+                        addToList(all_upgrades[i].name_tier_2, "inventory");
+                        break;
+                      }
+                      case 3: {
+                        addToList(all_upgrades[i].name_tier_3, "inventory");
+                        break;
+                      }
+                    }
+                  } else if (all_upgrades[i].internal_name === "assistant") {
+                    switch (content.assistant) {
+                      case 0: {
+                        addToList(
+                          all_upgrades[i].name_tier_1,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          1
+                        );
+                        break;
+                      }
+                      case 1: {
+                        addToList(
+                          all_upgrades[i].name_tier_2,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          2
+                        );
+                        addToList(all_upgrades[i].name_tier_1, "inventory");
+                        break;
+                      }
+                      case 2: {
+                        addToList(
+                          all_upgrades[i].name_tier_3,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          3
+                        );
+                        addToList(all_upgrades[i].name_tier_2, "inventory");
+                        break;
+                      }
+                      case 3: {
+                        addToList(all_upgrades[i].name_tier_3, "inventory");
+                        break;
+                      }
+                    }
+                  } else if (all_upgrades[i].internal_name === "helmet") {
+                    switch (content.helmet) {
+                      case 0: {
+                        addToList(
+                          all_upgrades[i].name_tier_1,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          1
+                        );
+                        break;
+                      }
+                      case 1: {
+                        addToList(
+                          all_upgrades[i].name_tier_2,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          2
+                        );
+                        addToList(all_upgrades[i].name_tier_1, "inventory");
+                        break;
+                      }
+                    }
+                  } else if (all_upgrades[i].internal_name === "housing") {
+                    switch (content.housing) {
+                      case 0: {
+                        addToList(
+                          all_upgrades[i].name_tier_1,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          1
+                        );
+                        break;
+                      }
+                      case 1: {
+                        addToList(
+                          all_upgrades[i].name_tier_2,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          2
+                        );
+                        addToList(all_upgrades[i].name_tier_1, "inventory");
+                        break;
+                      }
+                    }
+                  } else if (all_upgrades[i].internal_name === "meals") {
+                    switch (content.meals) {
+                      case 0: {
+                        addToList(
+                          all_upgrades[i].name_tier_1,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          1
+                        );
+                        break;
+                      }
+                      case 1: {
+                        addToList(
+                          all_upgrades[i].name_tier_2,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          2
+                        );
+                        addToList(all_upgrades[i].name_tier_1, "inventory");
+                        break;
+                      }
+                    }
+                  } else if (all_upgrades[i].internal_name === "cartographer") {
+                    switch (content.cartographer) {
+                      case 0: {
+                        addToList(
+                          all_upgrades[i].name_tier_1,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          1
+                        );
+                        break;
+                      }
+                      case 1: {
+                        addToList(
+                          all_upgrades[i].name_tier_2,
+                          "shop",
+                          all_upgrades[i].internal_name,
+                          2
+                        );
+                        addToList(all_upgrades[i].name_tier_1, "inventory");
+                        break;
+                      }
+                    }
+                  }
+                }
+              })
+          );
+      }
       updatePoints(0);
-      fetchUserUpgrades();
+      updateMiningValues();
       updatePointDisplay();
+      updateInventory();
     </script>
   </body>
 </html>
