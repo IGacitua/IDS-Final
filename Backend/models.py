@@ -43,16 +43,21 @@ class Upgrade(db.Model):
 
     # Tier 1
     value_tier_1 = db.Column(db.Float, nullable=False) 
+    cost_tier_1 = db.Column(db.Integer, nullable = False)
     name_tier_1 = db.Column(db.String(255), nullable=False)
     # Tier 2
     value_tier_2 = db.Column(db.Float, nullable=True)
+    cost_tier_2 = db.Column(db.Integer, nullable = True)
     name_tier_2 = db.Column(db.String(255), nullable=True)
     # Tier 3
     value_tier_3 = db.Column(db.Float, nullable=True)
+    cost_tier_3 = db.Column(db.Integer, nullable = True)
     name_tier_3 = db.Column(db.String(255), nullable=True)
     # Tier 4
     value_tier_4 = db.Column(db.Float, nullable=True)
+    cost_tier_4 = db.Column(db.Integer, nullable = True)
     name_tier_4 = db.Column(db.String(255), nullable=True)
     # Tier 5
     value_tier_5 = db.Column(db.Float, nullable=True)
+    cost_tier_5 = db.Column(db.Integer, nullable = True)
     name_tier_5 = db.Column(db.String(255), nullable=True)
