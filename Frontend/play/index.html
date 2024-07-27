@@ -41,7 +41,7 @@
       var currentValues = {
         pointsTotal: 0,
         pointsSpent: 0,
-        pointsGain: 1,
+        pointsGain: 0,
         pointsPassive: 0,
         lastClick: 0,
       };
@@ -51,7 +51,7 @@
       }
 
       function fetchUserUpgrades() {
-        currentValues.pointsGain = 1;
+        currentValues.pointsGain = 0;
         currentValues.pointsPassive = 0;
 
         let all_upgrades;
@@ -74,34 +74,30 @@
           .then((content) => {
             for (let i = 0; i < all_upgrades.length; i++) {
               if (all_upgrades[i].internal_name === "pickaxe") {
-                if (content.pickaxe > 0) {
-                  console.log(`Pickaxe value: ${content.pickaxe}`);
-                  switch (content.pickaxe) {
-                    case 1: {
-                      console.log(`Added ${all_upgrades[i].value_tier_1}`);
-                      miningAddition += all_upgrades[i].value_tier_1;
-                      break;
-                    }
-                    case 2: {
-                      console.log(`Added ${all_upgrades[i].value_tier_2}`);
-                      miningAddition += all_upgrades[i].value_tier_2;
-                      break;
-                    }
-                    case 3: {
-                      console.log(`Added ${all_upgrades[i].value_tier_3}`);
-                      miningAddition += all_upgrades[i].value_tier_3;
-                      break;
-                    }
-                    case 4: {
-                      console.log(`Added ${all_upgrades[i].value_tier_4}`);
-                      miningAddition += all_upgrades[i].value_tier_4;
-                      break;
-                    }
-                    case 5: {
-                      console.log(`Added ${all_upgrades[i].value_tier_5}`);
-                      miningAddition += all_upgrades[i].value_tier_5;
-                      break;
-                    }
+                console.log(`Pickaxe Value: ${content.pickaxe}`);
+                switch (content.pickaxe) {
+                  case 1: {
+                    miningAddition += all_upgrades[i].value_tier_1;
+                    break;
+                  }
+                  case 2: {
+                    miningAddition += all_upgrades[i].value_tier_2;
+                    break;
+                  }
+                  case 3: {
+                    miningAddition += all_upgrades[i].value_tier_3;
+                    break;
+                  }
+                  case 4: {
+                    miningAddition += all_upgrades[i].value_tier_4;
+                    break;
+                  }
+                  case 5: {
+                    miningAddition += all_upgrades[i].value_tier_5;
+                    break;
+                  }
+                  default: {
+                    miningAddition += 1;
                   }
                 }
               } else if (all_upgrades[i].internal_name === "lantern") {
@@ -166,7 +162,7 @@
               }
             }
             currentValues.pointsPassive = miningPassive;
-            currentValues.pointsGain =
+            currentValues.pointsGain +=
               miningAddition ** miningExponent * miningMultiply;
             console.log(
               `Current User Values: ${JSON.stringify(currentValues)}`
