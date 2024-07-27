@@ -12,7 +12,7 @@
         <ul style="list-style-type: none" id="upgradeShop"></ul>
       </shop>
       <div style="float: left; width: 40%">
-        <button onclick="fetchUserUpgrades()">
+        <button onclick="updatePoints()">
           <img
             id="cubeImage"
             src="/Data/Images/cubeStageOne.png"
@@ -172,6 +172,48 @@
             );
           });
       }
+      function updatePoints() {
+              const userId = returnUser();
+              const pointsToAdd = currentValues.pointsGain;
+              
+              fetch(`http://localhost:5000/users/${userId}/`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ points: pointsToAdd }),
+              })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.id) {
+                  currentValues.pointsTotal = data.total_points;
+                  document.getElementById('pointDisplay').innerText = `Total Points: ${currentValues.pointsTotal}`;
+                } else {
+                  console.log('Error updating points:', data);
+                }
+              })
+              .catch((error) => {
+                console.log('Request failed', error);
+              });
+            }
+      
+            // Initial fetch to display user points
+            document.addEventListener('DOMContentLoaded', (event) => {
+              const userId = returnUser();
+              fetch(`http://localhost:5000/users/${userId}/`, {
+                method: "GET",
+              })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.id) {
+                  currentValues.pointsTotal = data.total_points;
+                  document.getElementById('pointDisplay').innerText = `Total Points: ${currentValues.pointsTotal}`;
+                }
+              })
+              .catch((error) => {
+                console.log('Request failed', error);
+              });
+            });
     </script>
   </body>
 </html>
