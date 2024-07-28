@@ -284,6 +284,7 @@
                       updateInventory();
                       updateMiningValues();
                       updatePointDisplay();
+                      winning(); //llamo a winning() para verificar si el usuario tiene todas las mejoras
                     })
                     .catch((error) => {
                       console.error("Failed to update user upgrade", error);
@@ -547,7 +548,7 @@
           .then((upgrades) => {
             const upgradeNames = ["pickaxe", "lantern", "assistant", "helmet", "housing", "meals", "cartographer"];
             //Con every puedo recorrer el array upgrades y verificar que se cumpla la condicion (todas estan mejoradas al 5)
-            let allTier5 = upgradeNames.every(upgrade => upgrades[upgrade] >= 2);
+            let allTier5 = upgradeNames.every(upgrade => upgrades[upgrade] >= 5);
             console.log(allTier5);
             if (allTier5) {
               fetch(`${hostURL}/users/${userID}/`, {method: "GET"})
@@ -559,8 +560,6 @@
                   console.error("Failed to fetch user data", error);
                   alert("An error occurred while obtaining user data.");
                 });
-            } else {
-              alert("You don't have all tiers 5.");
             }
           })
           .catch((error) => {
