@@ -36,6 +36,11 @@
           id="upgradeInventory"
         ></ul>
       </inventory>
+      <div style="clear: both;"></div>
+      <div id="purchasedUpgrades" style="text-align: center;">
+        <h3>purchased Upgrades</h3>
+        <ul style="list-style-type: none" id="purchasedUpgradeList"></ul>
+      </div>
     </div>
     <script>
       const hostURL = "http://localhost:5000";
@@ -215,15 +220,84 @@
         ${Math.floor(currentValues.pointsTotal - currentValues.pointsSpent)}`;
       }
 
+      //Funcion para comprar mejoras (de nada, tiene manejo de errores por las dudas :) )
       function buyUpgrade(internalName, tier, cost) {
-        alert(
-          `${internalName}, tier ${tier} was bought for ${cost} qubit fragments.`
+        const userID = returnUser();
+        const hostURL = 'http://localhost:5000';
+      
+        fetch(`${hostURL}/users/${userID}`, { method: "GET" })
+          .then((response) => response.json())
+          .then((user) => {
+            currentValues.pointsTotal = user.total_points;
+            currentValues.pointsSpent = user.spent_points || 0;
+      
+            console.log(`User Total Points: ${currentValues.pointsTotal}`);
+            console.log(`User Spent Points: ${currentValues.pointsSpent}`);
+      
+            const availablePoints = currentValues.pointsTotal - currentValues.pointsSpent;
+      
+            console.log(`Available Points: ${availablePoints}`);
+            console.log(`Cost of Upgrade: ${cost}`);
+      
+            if (availablePoints >= cost) {
+              const newSpentPoints = currentValues.pointsSpent + cost;
+      
+              fetch(`${hostURL}/users/${userID}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  spent_points: newSpentPoints,
+                }),
+              })
+                .then(() => {
+                  fetch(`${hostURL}/users/${userID}/upgrades`, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      [internalName]: tier,
+                    }),
+                  })
+                    .then(() => {
+                      alert(`${internalName}, tier ${tier} was bought for ${cost} qubit fragments.`);
+                      updateInventory();
+                      updateMiningValues();
+                      updateUpgrades();
+                      addPurchasedUpgradetoDisplay(internalName, tier);
+                    })
+                    .catch((error) => {
+                      console.error("Failed to update user upgrade", error);
+                      alert("An error occurred while updating your upgrade.");
+                    });
+                })
+                .catch((error) => {
+                  console.error("Failed to update user points", error);
+                  alert("An error occurred while updating your points.");
+                });
+            } else {
+              alert(`${internalName}, tier ${tier} couldn't be bought. Insufficient fragments.`);
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to fetch user data.", error);
+            alert("An error occurred while fetching user data.");
+          });
+      }
+      
+      
+      function addPurchasedUpgradetoDisplay(internalName, tier) {
+        const purchasedUpgradeList =document.getElementById(
+          "purchasedUgradeList"
         );
-        updateInventory();
-        updateMiningValues();
-        updateUpgrades(); // After EVERYTHING executes, update upgrade lists and mining values
+        const newUpgradeItem = document.createElement("li");
+        newUpgradeItem.innerText = `${internalName}, tier ${tier}`;
+        purchasedUpgradeList.appendChild(newUpgradeItem);
       }
 
+      //Funcion
       function addToList(name, list, internal_name, tier, cost) {
         const listItem = document.createElement("li");
         listItem.innerText = name;
