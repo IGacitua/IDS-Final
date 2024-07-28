@@ -57,7 +57,8 @@
       }
 
       function destroyCUBE(){
-        alert("Victory?")
+        //we have to fetch and delete the user's info!!!
+        location.href = `../victory/`;
       }
 
       function updateMiningValues() {
@@ -546,6 +547,7 @@
                         break;
                       }
                     }
+                    
                   } else if (all_upgrades[i].internal_name === "winning_condition"){
                     if (content.pickaxe === 5 && content.lantern === 3 && content.assistant === 3 && content.helmet === 1 && content.housing === 1 && content.meals === 1 && content.cartographer === 1){
                       if (content.winning_condition === 0){
