@@ -36,10 +36,6 @@
           id="upgradeInventory"
         ></ul>
       </inventory>
-      <div style="clear: both;"></div>
-      <div id="purchasedUpgrades" style="text-align: center;">
-        <h3>purchased Upgrades</h3>
-        <ul style="list-style-type: none" id="purchasedUpgradeList"></ul>
       </div>
     </div>
     <script>
@@ -62,19 +58,17 @@
         currentValues.pointsPassive = 0;
 
         let all_upgrades;
-
-        fetch(`${hostURL}/upgrades/`, { method: "GET" })
-          .then((response) => response.json())
-          .then((content) => {
-            all_upgrades = content;
-          });
-
         let miningAddition = 0;
         let miningMultiply = 1;
         let miningExponent = 1;
         let miningPassive = 0;
-
-        fetch(`${hostURL}/users/${returnUser()}/upgrades/`, {
+        fetch(`${hostURL}/upgrades/`, { method: "GET" })
+          .then((response) => response.json())
+          .then((content) => {
+            all_upgrades = content;
+          })
+          .then(()=>{
+            fetch(`${hostURL}/users/${returnUser()}/upgrades/`, {
           method: "GET",
         })
           .then((response) => response.json())
@@ -174,7 +168,9 @@
             console.log(
               `Current User Values: ${JSON.stringify(currentValues)}`
             );
-          });
+          });});
+
+        
       }
 
       function updatePoints(variation) {
@@ -185,6 +181,7 @@
           .then((response) => response.json())
           .then((content) => {
             currentValues.pointsTotal = content.total_points;
+            currentValues.pointsSpent = content.spent_points;
             currentValues.lastClick = content.last_click;
             timeSpent = Math.floor(Date.now() / 1000) - currentValues.lastClick;
           })
@@ -220,16 +217,33 @@
         ${Math.floor(currentValues.pointsTotal - currentValues.pointsSpent)}`;
       }
 
-      //Funcion para comprar mejoras (de nada, tiene manejo de errores por las dudas :) )
+      function addToList(name, list, internal_name, tier, cost) {
+        const listItem = document.createElement("li");
+        listItem.innerText = name;
+        if (list === "inventory") {
+          const inventory = document.getElementById("upgradeInventory");
+          inventory.appendChild(listItem);
+        } else if (list === "shop") {
+          const shop = document.getElementById("upgradeShop");
+          const itemButton = document.createElement("button");
+          itemButton.innerText = `Buy - ${cost} Qubit Shards`;
+          itemButton.addEventListener("click", () => {
+            buyUpgrade(internal_name, tier, cost);
+          });
+          listItem.appendChild(itemButton);
+          shop.appendChild(listItem);
+        }
+      }
+
       function buyUpgrade(internalName, tier, cost) {
         const userID = returnUser();
-        const hostURL = 'http://localhost:5000';
       
-        fetch(`${hostURL}/users/${userID}`, { method: "GET" })
+        fetch(`${hostURL}/users/${userID}/`, { method: "GET" })
           .then((response) => response.json())
-          .then((user) => {
-            currentValues.pointsTotal = user.total_points;
-            currentValues.pointsSpent = user.spent_points || 0;
+          .then((content) => {
+            currentValues.pointsTotal = content.total_points;
+            currentValues.pointsSpent = content.spent_points || 0;
+            console.log(`Spent: ${currentValues.pointsSpent}. Total: ${currentValues.pointsTotal}`)
       
             console.log(`User Total Points: ${currentValues.pointsTotal}`);
             console.log(`User Spent Points: ${currentValues.pointsSpent}`);
@@ -241,8 +255,8 @@
       
             if (availablePoints >= cost) {
               const newSpentPoints = currentValues.pointsSpent + cost;
-      
-              fetch(`${hostURL}/users/${userID}`, {
+              console.log("Attempting to spend points")
+              fetch(`${hostURL}/users/${userID}/`, {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json",
@@ -252,7 +266,8 @@
                 }),
               })
                 .then(() => {
-                  fetch(`${hostURL}/users/${userID}/upgrades`, {
+                  console.log("Attempting to update upgrade")
+                  fetch(`${hostURL}/users/${userID}/upgrades/`, {
                     method: "PUT",
                     headers: {
                       "Content-Type": "application/json",
@@ -263,10 +278,10 @@
                   })
                     .then(() => {
                       alert(`${internalName}, tier ${tier} was bought for ${cost} qubit fragments.`);
+                      updatePoints(0);
                       updateInventory();
                       updateMiningValues();
-                      updateUpgrades();
-                      addPurchasedUpgradetoDisplay(internalName, tier);
+                      updatePointDisplay();
                     })
                     .catch((error) => {
                       console.error("Failed to update user upgrade", error);
@@ -285,35 +300,6 @@
             console.error("Failed to fetch user data.", error);
             alert("An error occurred while fetching user data.");
           });
-      }
-      
-      
-      function addPurchasedUpgradetoDisplay(internalName, tier) {
-        const purchasedUpgradeList =document.getElementById(
-          "purchasedUgradeList"
-        );
-        const newUpgradeItem = document.createElement("li");
-        newUpgradeItem.innerText = `${internalName}, tier ${tier}`;
-        purchasedUpgradeList.appendChild(newUpgradeItem);
-      }
-
-      //Funcion
-      function addToList(name, list, internal_name, tier, cost) {
-        const listItem = document.createElement("li");
-        listItem.innerText = name;
-        if (list === "inventory") {
-          const inventory = document.getElementById("upgradeInventory");
-          inventory.appendChild(listItem);
-        } else if (list === "shop") {
-          const shop = document.getElementById("upgradeShop");
-          const itemButton = document.createElement("button");
-          itemButton.innerText = `Buy - ${cost} Qubit Shards`;
-          itemButton.addEventListener("click", () => {
-            buyUpgrade(internal_name, tier, cost);
-          });
-          listItem.appendChild(itemButton);
-          shop.appendChild(listItem);
-        }
       }
 
       function updateInventory() {
@@ -577,6 +563,7 @@
               })
           );
       }
+
       updatePoints(0);
       updateMiningValues();
       updatePointDisplay();
