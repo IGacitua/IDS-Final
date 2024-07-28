@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Qubit Quarry</title>
     <link rel="icon" type="image/x-icon" href="/Data/Images/favicon.png" />
   </head>
@@ -121,7 +123,7 @@
                 }
               } else if (all_upgrades[i].internal_name === "assistant") {
                 if (content.assistant > 0) {
-                  console.log(`Assistant Value: ${content.assitant}`);
+                  console.log(`Assistant Value: ${content.assistant}`);
                   switch (content.assistant) {
                     case 1: {
                       miningPassive += all_upgrades[i].value_tier_1;
@@ -535,6 +537,39 @@
               })
           );
       }
+      
+      // Funcion ganador 
+      function winning(){
+        const userID = returnUser();
+
+        fetch(`${hostURL}/users/${userID}/upgrades/`, {method: "GET"})
+          .then((response) => response.json())
+          .then((upgrades) => {
+            const upgradeNames = ["pickaxe", "lantern", "assistant", "helmet", "housing", "meals", "cartographer"];
+            //Con every puedo recorrer el array upgrades y verificar que se cumpla la condicion (todas estan mejoradas al 5)
+            let allTier5 = upgradeNames.every(upgrade => upgrades[upgrade] >= 2);
+            console.log(allTier5);
+            if (allTier5) {
+              fetch(`${hostURL}/users/${userID}/`, {method: "GET"})
+                .then((response) => response.json())
+                .then((user) => {
+                  alert("Lo lograste!!! Tras adquirir todas las mejoras puedes romper el cubo!!!")
+                })
+                .catch((error) => {
+                  console.error("Failed to fetch user data", error);
+                  alert("An error occurred while obtaining user data.");
+                });
+            } else {
+              alert("You don't have all tiers 5.");
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to fetch user upgrades", error);
+            alert("An error occurred while obtaining user upgrades.");
+          })
+      }
+
+
 
       updatePoints(0);
       updateMiningValues();
