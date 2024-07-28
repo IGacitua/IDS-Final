@@ -5,7 +5,7 @@ INSERT INTO upgrades (
     ) 
 VALUES (
     'pickaxe', 'ADD', 5, 'Iron Pickaxe', 10, 'Bronze Pickaxe', 15, 'Steel Pickaxe', 20, 'Mithril Pickaxe', 30, 'Qubit Pickaxe',
-    25, 250, 1000, 10000, 50000,
+    25, 250, 1000, 10000, 120000,
     'A basic pickaxe made of unalloyed iron. Increases base point gain',
     'A pickaxe made of bronze. Slightly better than basic iron',
     'A good quality steel pickaxe. Most employees use it due to its reliability',
@@ -20,8 +20,8 @@ INSERT INTO upgrades (
     ) 
 VALUES (
     'lantern', 'MULTIPLY', 1.5, 'Gas Lamp', 2, 'Electric Lantern', 3, 'Flashlight',
-    100, 1500, 15000,
-    'A low-quality gas lamp. Being able to see increases your ability by a lot.',
+    100, 1500, 50000,
+    'A low-quality gas lamp. Being able to see increases your ability to mine by a lot.',
     'A lantern powered by batteries. More reliable than the gas lamp',
     'A more convenient version of the lantern. A lot smaller and efficient.'
 );
@@ -33,7 +33,7 @@ INSERT INTO upgrades (
     ) 
 VALUES (
     'assistant', 'PASSIVE', 5, 'Elves', 10, 'Gnomes', 20, 'Dwarves',
-    100, 1500, 10000,
+    100, 1500, 100000,
     'Elven assistants to mine even when you are not. They are weak',
     'Gnomes are a lot better at mining than elves. But so are most people',
     'Dwarves are born for the mines. Rock and Stone!'
@@ -44,7 +44,7 @@ INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, cost_tier_1, description_tier_1
     ) 
 VALUES (
-    'meals', 'EXPONENT', 1.1, 'Regular Meals', 2500, 
+    'meals', 'EXPONENT', 1.1, 'Regular Meals', 1000, 
     'Being able to reliably feed yourself allows for more time at the mine before getting tired.'
 );
 

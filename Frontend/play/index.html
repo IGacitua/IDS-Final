@@ -91,7 +91,6 @@
           .then((response) => response.json())
           .then((content) => {
             for (let i = 0; i < all_upgrades.length; i++) {
-              console.log(all_upgrades[i].internal_name)
               if (all_upgrades[i].internal_name === "pickaxe") {
                 switch (content.pickaxe) {
                   case 1: {
@@ -171,6 +170,7 @@
               } else if(all_upgrades[i].internal_name === "winning_condition") {
                 if (content.winning_condition){
                   currentValues.canDestroyCube = true;
+                  alert("You have obtained Anti-CUBE weaponry. You can now destroy THE CUBE.")
                 }
               } 
               else {
@@ -180,9 +180,6 @@
             currentValues.pointsPassive = miningPassive;
             currentValues.pointsGain +=
               miningAddition ** miningExponent * miningMultiply;
-            console.log(
-              `Current User Values: ${JSON.stringify(currentValues)}`
-            );
           });});
 
         
@@ -261,19 +258,12 @@
       function buyUpgrade(internalName, tier, cost) {
         const userID = returnUser();
         
-        if (internalName === 'winning_condition'){
-          alert("You have obtained Anti-CUBE weaponry. You can now destroy THE CUBE.")
-        }
 
         fetch(`${hostURL}/users/${userID}/`, { method: "GET" })
           .then((response) => response.json())
           .then((content) => {
             currentValues.pointsTotal = content.total_points;
             currentValues.pointsSpent = content.spent_points || 0;
-            console.log(`Spent: ${currentValues.pointsSpent}. Total: ${currentValues.pointsTotal}`)
-      
-            console.log(`User Total Points: ${currentValues.pointsTotal}`);
-            console.log(`User Spent Points: ${currentValues.pointsSpent}`);
       
             const availablePoints = currentValues.pointsTotal - currentValues.pointsSpent;
       
@@ -304,12 +294,10 @@
                     }),
                   })
                     .then(() => {
-                      //alert(`${internalName}, tier ${tier} was bought for ${cost} qubit fragments.`);
                       updatePoints(0);
                       updateInventory();
                       updateMiningValues();
                       updatePointDisplay();
-                      //winning(); //llamo a winning() para verificar si el usuario tiene todas las mejoras
                     })
                     .catch((error) => {
                       console.error("Failed to update user upgrade", error);
@@ -350,7 +338,6 @@
                 upgradeShop.innerHTML = "";
                 upgradeInventory.innerHTML = "";
                 for (let i = 0; i < all_upgrades.length; i++) {
-                  console.log(`${JSON.stringify(all_upgrades)}`)
                   if (all_upgrades[i].internal_name === "pickaxe") {
                     switch (content.pickaxe) {
                       case 0: {
@@ -578,7 +565,7 @@
                   } else if (all_upgrades[i].internal_name === "winning_condition"){
                     if (content.pickaxe === 5 && content.lantern === 3 && content.assistant === 3 && content.helmet === 1 && content.housing === 1 && content.meals === 1 && content.cartographer === 1){
                       if (content.winning_condition === 0){
-                        addToList(all_upgrades[i].name_tier_1, "shop", all_upgrades[i].internal_name, 1, all_upgrades[i].cost_tier_1)
+                        addToList(all_upgrades[i].name_tier_1, "shop", all_upgrades[i].internal_name, all_upgrades[i].description_tier_1, 1, all_upgrades[i].cost_tier_1)
                       } else {
                         addToList(all_upgrades[i].name_tier_1, "inventory")
                       }
