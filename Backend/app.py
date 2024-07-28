@@ -237,18 +237,23 @@ def list_upgrades():
                 'value_tier_1': upgrade.value_tier_1,
                 'cost_tier_1': upgrade.cost_tier_1,
                 'name_tier_1': upgrade.name_tier_1,
+                'description_tier_1': upgrade.description_tier_1,
                 'value_tier_2': upgrade.value_tier_2,
                 'cost_tier_2': upgrade.cost_tier_2,
                 'name_tier_2': upgrade.name_tier_2,
+                'description_tier_2': upgrade.description_tier_2,
                 'value_tier_3': upgrade.value_tier_3,
                 'cost_tier_3': upgrade.cost_tier_3,
                 'name_tier_3': upgrade.name_tier_3,
+                'description_tier_3': upgrade.description_tier_3,
                 'value_tier_4': upgrade.value_tier_4,
                 'cost_tier_4': upgrade.cost_tier_4,
                 'name_tier_4': upgrade.name_tier_4,
+                'description_tier_4': upgrade.description_tier_4,
                 'value_tier_5': upgrade.value_tier_5,
                 'cost_tier_5': upgrade.cost_tier_5,
-                'name_tier_5': upgrade.name_tier_5
+                'name_tier_5': upgrade.name_tier_5,
+                'description_tier_5': upgrade.description_tier_5
             }
             upgrades_data.append(upgrade_data)
         return jsonify(upgrades_data)

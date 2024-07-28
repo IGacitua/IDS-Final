@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Qubit Quarry</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Qubit Quarry</title>
     <link rel="icon" type="image/x-icon" href="/Data/Images/favicon.png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
   </head>
 
   <body>
-    <div>
+    <div class="container mt-3">
       <shop style="float: left; width: 30%; text-align: center; height: 100%">
         <h3>Upgrade Shop</h3>
-        <ul style="list-style-type: none" id="upgradeShop"></ul>
+        <ul class="list-group list-group-flush" id="upgradeShop"></ul>
       </shop>
       <div style="float: left; width: 40%">
         <button onclick="updatePoints(1)">
@@ -34,7 +40,7 @@
       >
         <h3>Inventory</h3>
         <ul
-          style="list-style-type: none; height: 100%"
+        class="list-group list-group-flush"
           id="upgradeInventory"
         ></ul>
       </inventory>
@@ -51,6 +57,9 @@
         lastClick: 0,
         canDestroyCube: false
       };
+
+      const listItemClass = "list-group-item d-flex justify-content-between align-items-center";
+      const listButtonClass = "btn btn-dark";
 
       function returnUser() {
         return new URLSearchParams(window.location.search).get("user");
@@ -228,9 +237,10 @@
         ${Math.floor(currentValues.pointsTotal - currentValues.pointsSpent)}`;
       }
 
-      function addToList(name, list, internal_name, tier, cost) {
+      function addToList(name, list, internal_name, tier, cost, description) {
         const listItem = document.createElement("li");
         listItem.innerText = name;
+        listItem.className = listItemClass;
         if (list === "inventory") {
           const inventory = document.getElementById("upgradeInventory");
           inventory.appendChild(listItem);
@@ -240,7 +250,8 @@
           itemButton.innerText = `Buy - ${cost} Qubit Shards`;
           itemButton.addEventListener("click", () => {
             buyUpgrade(internal_name, tier, cost);
-          });
+          })
+          itemButton.className = listButtonClass;
           listItem.appendChild(itemButton);
           shop.appendChild(listItem);
         }
