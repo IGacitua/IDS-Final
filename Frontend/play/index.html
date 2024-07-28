@@ -237,7 +237,7 @@
         ${Math.floor(currentValues.pointsTotal - currentValues.pointsSpent)}`;
       }
 
-      function addToList(name, list, internal_name, tier, cost, description) {
+      function addToList(name, list, internal_name, description, tier, cost) {
         const listItem = document.createElement("li");
         listItem.innerText = name;
         listItem.className = listItemClass;
@@ -252,6 +252,7 @@
             buyUpgrade(internal_name, tier, cost);
           })
           itemButton.className = listButtonClass;
+          itemButton.title = description;
           listItem.appendChild(itemButton);
           shop.appendChild(listItem);
         }
@@ -357,6 +358,7 @@
                           all_upgrades[i].name_tier_1,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_1,
                           1,
                           all_upgrades[i].cost_tier_1
                         );
@@ -368,6 +370,7 @@
                           all_upgrades[i].name_tier_2,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_2,
                           2,
                           all_upgrades[i].cost_tier_2
                         );
@@ -379,6 +382,7 @@
                           all_upgrades[i].name_tier_3,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_3,
                           3,
                           all_upgrades[i].cost_tier_3
                         );
@@ -390,6 +394,7 @@
                           all_upgrades[i].name_tier_4,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_4,
                           4,
                           all_upgrades[i].cost_tier_4
                         );
@@ -401,6 +406,7 @@
                           all_upgrades[i].name_tier_5,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_5,
                           5,
                           all_upgrades[i].cost_tier_5
                         );
@@ -419,6 +425,7 @@
                           all_upgrades[i].name_tier_1,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_1,
                           1,
                           all_upgrades[i].cost_tier_1
                         );
@@ -429,6 +436,7 @@
                           all_upgrades[i].name_tier_2,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_2,
                           2,
                           all_upgrades[i].cost_tier_2
                         );
@@ -440,6 +448,7 @@
                           all_upgrades[i].name_tier_3,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_3,
                           3,
                           all_upgrades[i].cost_tier_3
                         );
@@ -458,6 +467,7 @@
                           all_upgrades[i].name_tier_1,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_1,
                           1,
                           all_upgrades[i].cost_tier_1
                         );
@@ -468,6 +478,7 @@
                           all_upgrades[i].name_tier_2,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_2,
                           2,
                           all_upgrades[i].cost_tier_2
                         );
@@ -479,6 +490,7 @@
                           all_upgrades[i].name_tier_3,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_3,
                           3,
                           all_upgrades[i].cost_tier_3
                         );
@@ -497,6 +509,7 @@
                           all_upgrades[i].name_tier_1,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_1,
                           1,
                           all_upgrades[i].cost_tier_1
                         );
@@ -514,6 +527,7 @@
                           all_upgrades[i].name_tier_1,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_1,
                           1,
                           all_upgrades[i].cost_tier_1
                         );
@@ -531,6 +545,7 @@
                           all_upgrades[i].name_tier_1,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_1,
                           1,
                           all_upgrades[i].cost_tier_1
                         );
@@ -548,6 +563,7 @@
                           all_upgrades[i].name_tier_1,
                           "shop",
                           all_upgrades[i].internal_name,
+                          all_upgrades[i].description_tier_1,
                           1,
                           all_upgrades[i].cost_tier_1
                         );

@@ -5,8 +5,12 @@ INSERT INTO upgrades (
     ) 
 VALUES (
     'pickaxe', 'ADD', 5, 'Iron Pickaxe', 10, 'Bronze Pickaxe', 15, 'Steel Pickaxe', 20, 'Mithril Pickaxe', 30, 'Qubit Pickaxe',
-    50, 250, 1000, 10000, 50000,
-    'Empty Description','Empty Description','Empty Description','Empty Description','Empty Description'
+    25, 250, 1000, 10000, 50000,
+    'A basic pickaxe made of unalloyed iron. Increases base point gain',
+    'A pickaxe made of bronze. Slightly better than basic iron',
+    'A good quality steel pickaxe. Most employees use it due to its reliability',
+    'A pickaxe made of the legendary mithril. Highly enchanted',
+    'A pickaxe made from fragments of The Cube. Nobody else has one remotely similar'
 );
 
 INSERT INTO upgrades (
@@ -15,9 +19,11 @@ INSERT INTO upgrades (
     description_tier_1, description_tier_2, description_tier_3
     ) 
 VALUES (
-    'lantern', 'MULTIPLY', 1.2, 'Gas Lamp', 1.5, 'Electric Lantern', 2, 'Flashlight',
-    100, 1500, 3000,
-    'Empty Description','Empty Description','Empty Description'
+    'lantern', 'MULTIPLY', 1.5, 'Gas Lamp', 2, 'Electric Lantern', 3, 'Flashlight',
+    100, 1500, 15000,
+    'A low-quality gas lamp. Being able to see increases your ability by a lot.',
+    'A lantern powered by batteries. More reliable than the gas lamp',
+    'A more convenient version of the lantern. A lot smaller and efficient.'
 );
 
 INSERT INTO upgrades (
@@ -27,8 +33,10 @@ INSERT INTO upgrades (
     ) 
 VALUES (
     'assistant', 'PASSIVE', 5, 'Elves', 10, 'Gnomes', 20, 'Dwarves',
-    500, 2000, 10000,
-    'Empty Description','Empty Description','Empty Description'
+    100, 1500, 10000,
+    'Elven assistants to mine even when you are not. They are weak',
+    'Gnomes are a lot better at mining than elves. But so are most people',
+    'Dwarves are born for the mines. Rock and Stone!'
 
 );
 
@@ -36,31 +44,36 @@ INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, cost_tier_1, description_tier_1
     ) 
 VALUES (
-    'meals', 'EXPONENT', 1.1, 'Regular Meals', 1000,'Empty Description'
+    'meals', 'EXPONENT', 1.1, 'Regular Meals', 2500, 
+    'Being able to reliably feed yourself allows for more time at the mine before getting tired.'
 );
 
 INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, cost_tier_1, description_tier_1
     ) 
 VALUES (
-    'housing', 'EXPONENT', 1.1, 'Good Housing', 5000,'Empty Description'
+    'housing', 'EXPONENT', 1.1, 'Good Housing', 10000,
+    'A better place to sleep. Better sleep means less sleep needed'
 );
 
 INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, cost_tier_1, description_tier_1
     ) 
 VALUES (
-    'helmet', 'MULTIPLY', 1.5, 'Mining Helmet', 2000, 'Empty Description'
+    'helmet', 'MULTIPLY', 1.5, 'Mining Helmet', 5000, 
+    'A helmet with a weak flashlight. Safety First!'
 );
 
 INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, cost_tier_1, description_tier_1
     ) 
 VALUES (
-    'cartographer', 'MULTIPLY', 3, 'Cartographer Assistant', 200000, 'Empty Description'
+    'cartographer', 'MULTIPLY', 3, 'Cartographer Assistant', 200000,
+     'A good cartographer allows for less getting lost in the labyrinthine tunnels that reach the cube'
 );
 INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, cost_tier_1, description_tier_1
 ) VALUES (
-    'winning_condition', 'VICTORY', 0, 'Anti-CUBE Explosives', 50000, 'Empty Description'
+    'winning_condition', 'VICTORY', 0, 'Anti-CUBE Explosives', 1000000, 
+    'The Cube shall know pain.'
 );
