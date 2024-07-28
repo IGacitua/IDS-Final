@@ -49,10 +49,15 @@
         pointsGain: 0,
         pointsPassive: 0,
         lastClick: 0,
+        canDestroyCube: false
       };
 
       function returnUser() {
         return new URLSearchParams(window.location.search).get("user");
+      }
+
+      function destroyCUBE(){
+        alert("Victory?")
       }
 
       function updateMiningValues() {
@@ -76,8 +81,8 @@
           .then((response) => response.json())
           .then((content) => {
             for (let i = 0; i < all_upgrades.length; i++) {
+              console.log(all_upgrades[i].internal_name)
               if (all_upgrades[i].internal_name === "pickaxe") {
-                console.log(`Pickaxe Value: ${content.pickaxe}`);
                 switch (content.pickaxe) {
                   case 1: {
                     miningAddition += all_upgrades[i].value_tier_1;
@@ -105,7 +110,6 @@
                 }
               } else if (all_upgrades[i].internal_name === "lantern") {
                 if (content.lantern > 0) {
-                  console.log(`Lantern value: ${content.lantern}`);
                   switch (content.lantern) {
                     case 1: {
                       miningMultiply *= all_upgrades[i].value_tier_1;
@@ -123,7 +127,6 @@
                 }
               } else if (all_upgrades[i].internal_name === "assistant") {
                 if (content.assistant > 0) {
-                  console.log(`Assistant Value: ${content.assistant}`);
                   switch (content.assistant) {
                     case 1: {
                       miningPassive += all_upgrades[i].value_tier_1;
@@ -141,26 +144,26 @@
                 }
               } else if (all_upgrades[i].internal_name === "helmet") {
                 if (content.helmet > 0) {
-                  console.log(`Helmet Value: ${content.helmet}`);
                   miningMultiply += all_upgrades[i].value_tier_1;
-                  break;
                 }
               } else if (all_upgrades[i].internal_name === "housing") {
                 if (content.housing > 0) {
-                  console.log(`Housing Value: ${content.housing}`);
                   miningExponent += all_upgrades[i].value_tier_1;
                 }
               } else if (all_upgrades[i].internal_name === "meals") {
                 if (content.meals > 0) {
-                  console.log(`Meals Value: ${content.meals}`);
                   miningExponent += all_upgrades[i].value_tier_1;
                 }
               } else if (all_upgrades[i].internal_name === "cartographer") {
                 if (content.cartographer > 0) {
-                  console.log(`Cartographer Value: ${content.cartographer}`);
                   miningMultiply *= all_upgrades[i].value_tier_1;
                 }
-              } else {
+              } else if(all_upgrades[i].internal_name === "winning_condition") {
+                if (content.winning_condition){
+                  currentValues.canDestroyCube = true;
+                }
+              } 
+              else {
                 console.log(`Invalid upgrade ${all_upgrades[i].internal_name}`);
               }
             }
@@ -178,6 +181,11 @@
       function updatePoints(variation) {
         const userID = returnUser();
         let timeSpent;
+        
+        if (currentValues.canDestroyCube){
+          destroyCUBE()
+        } 
+        else {
 
         fetch(`${hostURL}/users/${userID}`, { method: "GET" })
           .then((response) => response.json())
@@ -210,7 +218,7 @@
               .catch((error) => {
                 console.log("Request failed", error);
               });
-          });
+          });}
       }
 
       function updatePointDisplay() {
@@ -239,7 +247,11 @@
 
       function buyUpgrade(internalName, tier, cost) {
         const userID = returnUser();
-      
+        
+        if (internalName === 'winning_condition'){
+          alert("You have obtained Anti-CUBE weaponry. You can now destroy THE CUBE.")
+        }
+
         fetch(`${hostURL}/users/${userID}/`, { method: "GET" })
           .then((response) => response.json())
           .then((content) => {
@@ -279,12 +291,12 @@
                     }),
                   })
                     .then(() => {
-                      alert(`${internalName}, tier ${tier} was bought for ${cost} qubit fragments.`);
+                      //alert(`${internalName}, tier ${tier} was bought for ${cost} qubit fragments.`);
                       updatePoints(0);
                       updateInventory();
                       updateMiningValues();
                       updatePointDisplay();
-                      winning(); //llamo a winning() para verificar si el usuario tiene todas las mejoras
+                      //winning(); //llamo a winning() para verificar si el usuario tiene todas las mejoras
                     })
                     .catch((error) => {
                       console.error("Failed to update user upgrade", error);
@@ -325,6 +337,7 @@
                 upgradeShop.innerHTML = "";
                 upgradeInventory.innerHTML = "";
                 for (let i = 0; i < all_upgrades.length; i++) {
+                  console.log(`${JSON.stringify(all_upgrades)}`)
                   if (all_upgrades[i].internal_name === "pickaxe") {
                     switch (content.pickaxe) {
                       case 0: {
@@ -533,43 +546,20 @@
                         break;
                       }
                     }
+                  } else if (all_upgrades[i].internal_name === "winning_condition"){
+                    if (content.pickaxe === 5 && content.lantern === 3 && content.assistant === 3 && content.helmet === 1 && content.housing === 1 && content.meals === 1 && content.cartographer === 1){
+                      if (content.winning_condition === 0){
+                        addToList(all_upgrades[i].name_tier_1, "shop", all_upgrades[i].internal_name, 1, all_upgrades[i].cost_tier_1)
+                      } else {
+                        addToList(all_upgrades[i].name_tier_1, "inventory")
+                      }
+                    }
                   }
                 }
               })
           );
       }
       
-      // Funcion ganador 
-      function winning(){
-        const userID = returnUser();
-
-        fetch(`${hostURL}/users/${userID}/upgrades/`, {method: "GET"})
-          .then((response) => response.json())
-          .then((upgrades) => {
-            const upgradeNames = ["pickaxe", "lantern", "assistant", "helmet", "housing", "meals", "cartographer"];
-            //Con every puedo recorrer el array upgrades y verificar que se cumpla la condicion (todas estan mejoradas al 5)
-            let allTier5 = upgradeNames.every(upgrade => upgrades[upgrade] >= 5);
-            console.log(allTier5);
-            if (allTier5) {
-              fetch(`${hostURL}/users/${userID}/`, {method: "GET"})
-                .then((response) => response.json())
-                .then((user) => {
-                  alert("Lo lograste!!! Tras adquirir todas las mejoras puedes romper el cubo!!!")
-                })
-                .catch((error) => {
-                  console.error("Failed to fetch user data", error);
-                  alert("An error occurred while obtaining user data.");
-                });
-            }
-          })
-          .catch((error) => {
-            console.error("Failed to fetch user upgrades", error);
-            alert("An error occurred while obtaining user upgrades.");
-          })
-      }
-
-
-
       updatePoints(0);
       updateMiningValues();
       updatePointDisplay();

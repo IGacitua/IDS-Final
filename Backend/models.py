@@ -30,6 +30,7 @@ class UserUpgrade(db.Model):
     housing = db.Column(db.Integer, nullable = False, default = 0)
     helmet = db.Column(db.Integer, nullable = False, default = 0)
     cartographer = db.Column(db.Integer, nullable = False, default = 0)
+    winning_condition = db.Column(db.Integer, nullable = False, default = 0)
 
 class Upgrade(db.Model):
     __tablename__ = 'upgrades'

@@ -52,3 +52,8 @@ INSERT INTO upgrades (
 VALUES (
     'cartographer', 'MULTIPLY', 3, 'Cartographer Assistant', 200000
 );
+INSERT INTO upgrades (
+    internal_name, effect, value_tier_1, name_tier_1, cost_tier_1
+) VALUES (
+    'winning_condition', 'VICTORY', 0, 'Anti-CUBE Explosives', 50000
+);

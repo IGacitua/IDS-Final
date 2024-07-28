@@ -185,6 +185,7 @@ def list_user_upgrades(user_id):
                 "housing": upgrades.housing,
                 "helmet": upgrades.helmet,
                 "cartographer": upgrades.cartographer,
+                "winning_condition": upgrades.winning_condition
             }
             return jsonify(user_upgrades)
         else:
@@ -207,6 +208,7 @@ def update_user_upgrades(user_id):
         upgrades.housing=data.get('housing',upgrades.housing)
         upgrades.helmet=data.get('helmet',upgrades.helmet)
         upgrades.cartographer=data.get('cartographer',upgrades.cartographer)
+        upgrades.winning_condition = data.get('winning_condition', upgrades.winning_condition)
 
         db.session.commit()
         return jsonify({"message": "Upgrades updated succesfully."}), 200
