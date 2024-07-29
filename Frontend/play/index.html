@@ -13,14 +13,37 @@
     />
   </head>
 
-  <body>
+  <style>
+    .bg-color {
+      background-color: rgba(63, 63, 55, 0.836);
+    }
+    .bg-cube {
+      background-color: rgba(63, 63, 55, 0);
+      border-radius: 10px;
+      border:none;
+      box-shadow: none;
+    }
+    .bg-list {
+      background-color: rgb(255, 255, 255);
+      border-radius: 10px;
+      border-color: black;
+    }
+    .bg-display {
+      background-color: rgb(255, 255, 255);
+      border-radius: 10px;
+      border-color: black;
+      font-size:x-large;
+    }
+  </style>
+
+  <body class="bg-color">
     <div class="container mt-3">
-      <shop style="float: left; width: 30%; text-align: center; height: 100%">
+      <shop style="float: left; width: 30%; text-align: center; height: 100%" class="bg-list">
         <h3>Upgrade Shop</h3>
         <ul class="list-group list-group-flush" id="upgradeShop"></ul>
       </shop>
       <div style="float: left; width: 40%">
-        <button onclick="updatePoints(1)">
+        <button onclick="updatePoints(1)" class="bg-cube">
           <img
             id="cubeImage"
             src="/Data/Images/cubeStageOne.png"
@@ -32,13 +55,13 @@
             "
           />
         </button>
-        <p id="pointDisplay" style="text-align: center"></p>
+        <p id="pointDisplay" style="text-align: center" class="bg-display"></p>
       </div>
 
       <inventory
-        style="float: left; width: 30%; text-align: center; height: 100%"
+        style="float: left; width: 30%; text-align: center; height: 100%" 
       >
-        <h3>Inventory</h3>
+        <h3 class="bg-list">Inventory</h3>
         <ul class="list-group list-group-flush" id="upgradeInventory"></ul>
       </inventory>
     </div>
