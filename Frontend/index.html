@@ -11,65 +11,70 @@
       crossorigin="anonymous"
     />
     <link rel="icon" type="image/x-icon" href="/Data/Images/favicon.png" />
-  </head>
-  <style>
-    body {
-      padding: 20px;
-      margin: 0;
-    }
-    .text-justify {
-      text-align: justify;
-    }
-    .custom-button {
-      font-size: 30px;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 5px 20px;
-      border-radius: 10px;
-    }
-    .bg-image {
-      background: url("Data/Images/QubitCaveRe.jpg") no-repeat center
-        center fixed;
-      background-size: cover;
-      height: 100vh;
-    }
-    .text-main {
-      text-align: center;
-      color: white;
-      background-color: rgba(0, 0, 0, 0.571);
-      padding: 5px 20px;
-      border-radius: 15px;
-    }
-    .title {
-      text-align: center;
-      color: white;
-      background-color: rgba(0, 0, 0, 0.571);
-      padding: 5px 20px;
-      display: inline-block;
-      border-radius: 10px;
-    }
+    <style>
+      body {
+        padding: 20px;
+        margin: 0;
+      }
+      .text-justify {
+        text-align: justify;
+      }
+      .custom-button {
+        font-size: 30px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px 20px;
+        border-radius: 10px;
+      }
+      .bg-image {
+        background: url("Data/Images/QubitCaveRe.jpg") no-repeat center center
+          fixed;
+        background-size: cover;
+        height: 100vh;
+      }
+      .text-main {
+        text-align: center;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.571);
+        padding: 5px 20px;
+        border-radius: 15px;
+      }
+      .title {
+        text-align: center;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.571);
+        padding: 5px 20px;
+        display: inline-block;
+        border-radius: 10px;
+      }
 
-    .custom-footer {
-      color: rgba(255, 255, 255, 0.674);
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      padding: 5px;
-      background-color: rgba(0, 0, 0, 0.43);
-      border-radius: 10px;
-    }
-  </style>
+      .custom-footer {
+        color: rgba(255, 255, 255, 0.674);
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        padding: 5px;
+        background-color: rgba(0, 0, 0, 0.43);
+        border-radius: 10px;
+      }
+    </style>
+  </head>
 
   <!--Acá esta nuestro body original-->
   <body class="bg-image">
     <div class="container text-center"><h1 class="title">Qubit Quarry</h1></div>
     <div class="container text-main mb-3">
       <h4 class="text-light text-justify">
-        You are an ordinary miner. Like every day, you decide to go to the mine to get what you need to pay your daily fee. However, you didn't expect to find an ancient cube dating back to the amber age, 3000 years ago. Faced with the cube's magnificent presence, you decide to do what any veteran miner like you (who has been working at Qubit Inc. for 30 years) would do...Smash that cube!
+        You are an ordinary miner. Like every day, you decide to go to the mine
+        to get what you need to pay your daily fee. However, you didn't expect
+        to find an ancient cube dating back to the amber age, 3000 years ago.
+        Faced with the cube's magnificent presence, you decide to do what any
+        veteran miner like you (who has been working at Qubit Inc. for 30 years)
+        would do...Smash that cube!
       </h4>
     </div>
-    
+
     <button
       type="button"
       class="btn btn-dark custom-button"
@@ -89,7 +94,7 @@
         >
       </p>
     </footer>
-    
+
     <script>
       function createUser(newUser) {
         fetch("http://localhost:5000/users/", {
