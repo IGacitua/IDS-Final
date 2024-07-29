@@ -237,6 +237,11 @@
           fetch(`${hostURL}/users/${userID}`, { method: "GET" }) // GET request for user backend data
             .then((response) => response.json())
             .then((content) => {
+              if (content.name === undefined || content.name === null) {
+                // Checks if the user exists
+                alert("User does not exist.");
+                location.href = `../`;
+              }
               // Updates the user's values from backend
               currentValues.PointsTotal = content.total_points;
               currentValues.PointsSpent = content.spent_points;
