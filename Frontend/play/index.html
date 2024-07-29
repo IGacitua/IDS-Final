@@ -20,7 +20,7 @@
     .bg-cube {
       background-color: rgba(63, 63, 55, 0);
       border-radius: 10px;
-      border:none;
+      border: none;
       box-shadow: none;
     }
     .bg-list {
@@ -32,13 +32,16 @@
       background-color: rgb(255, 255, 255);
       border-radius: 10px;
       border-color: black;
-      font-size:x-large;
+      font-size: x-large;
     }
   </style>
 
   <body class="bg-color">
     <div class="container mt-3">
-      <shop style="float: left; width: 30%; text-align: center; height: 100%" class="bg-list">
+      <shop
+        style="float: left; width: 30%; text-align: center; height: 100%"
+        class="bg-list"
+      >
         <h3>Upgrade Shop</h3>
         <ul class="list-group list-group-flush" id="upgradeShop"></ul>
       </shop>
@@ -55,11 +58,15 @@
             "
           />
         </button>
-        <p id="pointDisplay" style="text-align: center" class="bg-display"></p>
+        <p
+          id="pointDisplay"
+          style="text-align: center; position: relative; top: 75px"
+          class="bg-display"
+        ></p>
       </div>
 
       <inventory
-        style="float: left; width: 30%; text-align: center; height: 100%" 
+        style="float: left; width: 30%; text-align: center; height: 100%"
       >
         <h3 class="bg-list">Inventory</h3>
         <ul class="list-group list-group-flush" id="upgradeInventory"></ul>
@@ -304,8 +311,10 @@
       // Updates the "Qubit Fragments" display below THE CUBE
       function updatePointDisplay() {
         const pointDisplay = document.getElementById("pointDisplay");
-        pointDisplay.innerText = `Qubit Fragments:
-        ${Math.floor(currentValues.PointsTotal - currentValues.PointsSpent)}`; // Turns any float values to int
+        pointDisplay.innerText = `Qubit Shards:
+        ${Math.floor(
+          currentValues.PointsTotal - currentValues.PointsSpent
+        ).toLocaleString()}`; // Math.floor turns the float into int, toLocaleString formats it
       }
 
       // Adds the given upgrade to either inventory or shop
@@ -323,7 +332,7 @@
           // If added to shop, it needs to be given the buy button
           const shop = document.getElementById("upgradeShop");
           const itemButton = document.createElement("button");
-          itemButton.innerText = `${cost} Qubit Shards`;
+          itemButton.innerText = `${cost.toLocaleString()} Qubit Shards`;
           itemButton.addEventListener("click", () => {
             // This is the onClick()
             buyUpgrade(internal_name, tier, cost);
