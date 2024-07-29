@@ -15,28 +15,72 @@
   </head>
 
   <style>
-    .bg-custom {
-      background: url('../Data/Images/trofeo.jpg') no-repeat center center;
-      padding: 140px;
+    .bg-custom-trophy {
+      background: url('../Data/Images/trofeo.jpg') no-repeat center;
+      padding: 150px;
+      background-size: contain;
+      position: relative;
+      top: 185px;
+    }
+    .bg-custom-party {
+      background: url('../Data/Images/celebration.png') no-repeat center center;
+      height: 100vh;
+      background-size: cover;
+    }
+    .custom-footer {
+      color: rgba(255, 255, 255, 0.674);
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 5px;
+      background-color: rgba(0, 0, 0, 0.43);
+      border-radius: 10px;
+    }
+    .custom-top-margin {
+      margin-top: 170px;
+    }
+    .custom-text {
+      color: white;
+      background-color: rgba(0, 0, 0, 0.432);
+      display: inline-block;
+      width: 50%;
+      padding: 5px;
+      border-radius: 5px;
     }
   </style>
-<div class="container mt-5 bg-custom text-dark text-center">
- Hola
+
+<div class="bg-custom-party">
+  <div class="bg-custom-trophy text-justify"> 
+    </div>
+    <div class="d-flex justify-content-center custom-top-margin">
+      <h4 class="custom-text">You have valiantly sacrificed yourself to destroy The Cube. Crazy Noisy Quarrying Company will remember your sacrifice... for a short time</h4>
+    </div>
+    <div class="d-flex justify-content-center btn-custom-top-margin">
+      <button class="btn btn-success" onclick=redirectToPlay()>Play Again?</button>
+    </div>
 </div>
-<div class="container mt-5">
-    <button class="btn btn-primary" onclick="redirectToPlay">Play Again!</button>
-</div> 
 
-
-  <footer class="custom-footer">
+<footer class="custom-footer">
     <p>
-      Image Designed by
+      Images Designed by
       <a
         href="https://www.freepik.com"
         target="_blank"
         rel="noopener noreferrer"
         >Freepik</a
-      >
+      > and  <a
+      href="https://es.pngtree.com/freebackground/vibrant-balloon-decorations-transform-party-room-for-birthday-celebrations-and-events-3d-rendering_13356977.html?sol=downref&id=bef"
+      target="_blank"
+      rel="noopener noreferrer"
+      >PNGTree</a
+    >
     </p>
   </footer>
+
+<script>
+  function redirectToPlay() {
+    location.href = `../`; // mueve al usuario al index.html que está en la carpeta frontend
+  }
+</script>
+
 </html>
