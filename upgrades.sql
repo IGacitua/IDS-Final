@@ -60,7 +60,7 @@ INSERT INTO upgrades (
     internal_name, effect, value_tier_1, name_tier_1, cost_tier_1, description_tier_1
     ) 
 VALUES (
-    'helmet', 'MULTIPLY', 1.5, 'Mining Helmet', 5000, 
+    'helmet', 'MULTIPLY', 1.5, 'Mining Helmet', 3000, 
     'A helmet with a weak flashlight. Safety First!'
 );
 
