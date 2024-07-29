@@ -66,9 +66,21 @@
       }
 
       function destroyCUBE(){
-        //we have to fetch and delete the user's info!!!
-        location.href = `../victory/`;
-      }
+    // hacemos fetch a la id del usuario para borrar sus datos y luego redirigirlo a la pantalla de victoria
+    const userID = returnUser();
+    fetch(`${hostURL}/users/${userID}/`, {method: "DELETE"})
+        .then((response) => {
+            if (response.ok) {
+                location.href = `../victory/`;
+            } else {
+                console.error('Failed to delete user');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
 
       function updateMiningValues() {
         currentValues.pointsGain = 0;
@@ -170,7 +182,7 @@
               } else if(all_upgrades[i].internal_name === "winning_condition") {
                 if (content.winning_condition){
                   currentValues.canDestroyCube = true;
-                  alert("You have obtained Anti-CUBE weaponry. You can now destroy THE CUBE.")
+                  alert("You have obtained Anti-CUBE weaponry. You can now destroy THE CUBE. Note: You might not survive")
                 }
               } 
               else {
